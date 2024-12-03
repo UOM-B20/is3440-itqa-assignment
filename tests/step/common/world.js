@@ -8,14 +8,11 @@ class CustomWorld extends World {
   }
 
   async initAPI() {
-    if (!this.apiContext) {
-      const browser = await chromium.launch({ headless: true });
-      this.apiContext = await browser.newContext({
-        baseURL: "http://localhost:7081",
-      });
-      this.apiRequest = this.apiContext.request;
-    }
-    return this.apiContext;
+    const context = await chromium.request.newContext({
+      baseURL: "http://localhost:7081",
+    });
+    this.apiContext = context;
+    return context;
   }
 
   async initUI() {
