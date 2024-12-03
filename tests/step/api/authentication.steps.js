@@ -4,16 +4,17 @@ const { expect } = require("@playwright/test");
 When(
   "I send a {string} request to {string} without authentication",
   async function (method, endpoint) {
-    if (!this.apiRequest) {
+    // Initialize API context if not already done
+    if (!this.apiContext) {
       await this.initAPI();
     }
 
     switch (method.toUpperCase()) {
       case "GET":
-        this.response = await this.apiRequest.get(endpoint);
+        this.response = await this.apiContext.get(endpoint);
         break;
       case "POST":
-        this.response = await this.apiRequest.post(endpoint, {
+        this.response = await this.apiContext.post(endpoint, {
           data: {
             title: "Test Book",
             author: "Test Author",
@@ -21,7 +22,7 @@ When(
         });
         break;
       case "PUT":
-        this.response = await this.apiRequest.put(endpoint, {
+        this.response = await this.apiContext.put(endpoint, {
           data: {
             title: "Updated Book",
             author: "Updated Author",
@@ -29,7 +30,7 @@ When(
         });
         break;
       case "DELETE":
-        this.response = await this.apiRequest.delete(endpoint);
+        this.response = await this.apiContext.delete(endpoint);
         break;
     }
   }

@@ -1,5 +1,5 @@
 const { setWorldConstructor, World } = require("@cucumber/cucumber");
-const { chromium } = require("@playwright/test");
+const { chromium, request } = require("@playwright/test");
 
 class CustomWorld extends World {
   constructor(options) {
@@ -8,11 +8,10 @@ class CustomWorld extends World {
   }
 
   async initAPI() {
-    const context = await chromium.request.newContext({
+    this.apiContext = await request.newContext({
       baseURL: "http://localhost:7081",
     });
-    this.apiContext = context;
-    return context;
+    return this.apiContext;
   }
 
   async initUI() {
