@@ -1,4 +1,4 @@
-
+@ui
 Feature: Sauce Demo Login
 
   Background:
