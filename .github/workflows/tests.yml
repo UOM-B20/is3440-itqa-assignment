@@ -7,7 +7,7 @@ on:
 
 jobs:
   ui-tests:
-    name: UI Tests
+    name: ui-tests
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
@@ -45,7 +45,7 @@ jobs:
           retention-days: 30
 
   api-tests:
-    name: API Tests
+    name: api-tests
     timeout-minutes: 30
     runs-on: ubuntu-latest
     steps:
