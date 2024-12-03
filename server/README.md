@@ -92,15 +92,3 @@ Note: All endpoints require Basic Authentication using the credentials provided 
 | 404         | Not Found - Book doesn't exist         |
 
 **Note:** All responses will be returned in JSON format with appropriate HTTP status codes.
-
-### Example Error Response
-
-```json
-{
-  "timestamp": "2024-03-21T10:15:30.123Z",
-  "status": 400,
-  "error": "Bad Request",
-  "message": "Invalid book parameters",
-  "path": "/api/books"
-}
-```
