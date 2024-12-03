@@ -1,0 +1,19 @@
+{
+  "name": "itqa-assigment",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "server": "java -jar server/demo-0.0.1-SNAPSHOT.jar"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.49.0",
+    "@types/node": "^22.10.1"
+  },
+  "dependencies": {
+    "@cucumber/cucumber": "^11.1.0"
+  }
+}
