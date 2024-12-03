@@ -11,20 +11,36 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
+          cache: "npm"
+
       - name: Install dependencies
         run: npm ci
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+
       - name: Run UI tests
         run: npx cucumber-js tests/features/ui/*.feature
+
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
           name: ui-test-report
-          path: playwright-report/
+          path: cucumber-report/
           retention-days: 30
 
   api-tests:
@@ -32,16 +48,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
+          cache: "npm"
+
       - name: Install dependencies
         run: npm ci
+
       - name: Run API tests
         run: npx cucumber-js tests/features/api/*.feature
+
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
           name: api-test-report
-          path: playwright-report/
+          path: cucumber-report/
           retention-days: 30
