@@ -3,7 +3,10 @@ const path = require("path");
 
 class ServerManager {
   async start() {
-    const jarPath = path.join(__dirname, "../server/demo-0.0.1-SNAPSHOT.jar");
+    const jarPath = path.join(
+      __dirname,
+      "../../server/demo-0.0.1-SNAPSHOT.jar"
+    );
     this.serverProcess = spawn("java", ["-jar", jarPath]);
 
     return this.waitForServer();
