@@ -31,9 +31,14 @@ Before(async function ({ pickle }) {
   }
 
   // API test setup
-  if (this.apiContext) {
-    testDataManager = new TestDataManager(this.apiContext);
-    await testDataManager.setupTestData();
+  try {
+    if (this.apiContext) {
+      testDataManager = new TestDataManager(this.apiContext);
+      await testDataManager.setupTestData();
+    }
+  } catch (error) {
+    console.error("Error setting up test data:", error);
+    throw error;
   }
 });
 
