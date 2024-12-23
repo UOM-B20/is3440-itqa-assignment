@@ -38,7 +38,7 @@
    - Create a new book with valid title and author using regular user credentials
    - Verify the book is created successfully with status code 201
 
-**Member 2**:
+**Member 2**: [@sachinb7]
 
 1. **Positive Test - Create Book (Admin)**
 
