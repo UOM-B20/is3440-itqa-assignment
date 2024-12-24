@@ -11,18 +11,26 @@ Feature: Book API Authorization for Admin Role
     And the response should contain an empty list
 
   Scenario: Admin can successfully create a new book
-    When I have created a book with title "Admin Book" and author "Admin Author"
+    When I have created a book with following details:
+      | title       | author      |
+      | Admin Book  | Admin Author |
     Then the response status code should be 201
-    And the response should contain the created book details title "Admin Book" and author "Admin Author"
+    And the book details should match:
+      | title       | author      |
+      | Admin Book  | Admin Author |
 
   Scenario: Admin can view specific book details
-    Given I have created a book with title "Admin Book" and author "Admin Author"
+    Given I have created a book with following details:
+      | title       | author      |
+      | Admin Book  | Admin Author |
     When I send a "GET" request to "/api/books/{stored-id}"
     Then the response status code should be 200
 
   Scenario: Admin can update existing book
-    Given I have created a book with title "Admin Book" and author "Admin Author"
-    When I send a "PUT" request to "/api/books/{stored-id}" with updated details:
+    Given I have created a book with following details:
+      | title       | author      |
+      | Admin Book  | Admin Author |
+    When I update the book with:
       """
       {
         "id": "{stored-id}",
@@ -33,6 +41,8 @@ Feature: Book API Authorization for Admin Role
     Then the response status code should be 200
 
   Scenario: Admin can not delete a book
-    Given I have created a book with title "Admin Book" and author "Admin Author"
+    Given I have created a book with following details:
+      | title       | author      |
+      | Admin Book  | Admin Author |  
     When I send a "DELETE" request to "/api/books/{stored-id}"
     Then the response status code should be 403
