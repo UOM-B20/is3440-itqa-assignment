@@ -13,12 +13,6 @@ class CustomWorld extends World {
   }
 
   async initAPI() {
-    // START SERVER EVERYTIME, TO MAKE SURE WE HAVE FRESH DATABASE( IN MEMORY DATABASE)
-    await serverUtils.startServer();
-
-    if (this.apiContext) {
-      await this.apiContext.dispose();
-    }
     this.apiContext = await request.newContext({
       baseURL: serverUtils.BASE_URL,
       storageState: undefined,
@@ -27,9 +21,6 @@ class CustomWorld extends World {
   }
 
   async closeAPI() {
-    // SHUTDOWN SERVER
-    await serverUtils.shutdown();
-
     await this.reset();
   }
 

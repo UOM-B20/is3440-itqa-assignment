@@ -3,9 +3,8 @@ const { expect } = require("@playwright/test");
 const serverUtils = require("../../support/server-utils");
 
 Given("the book database is empty", async function () {
-  await serverUtils.clearDatabase();
-  const isEmpty = await serverUtils.isDatabaseEmpty();
-  expect(isEmpty).toBe(true);
+  const cleaned = await serverUtils.clearDatabase();
+  expect(cleaned).toBe(true);
 });
 
 Given(
@@ -23,15 +22,19 @@ When(
       ? endpoint.replace("{stored-id}", this.storedBookId)
       : endpoint;
 
+    const headers = {
+      ...this.currentAuth,
+    };
+
     switch (method.toUpperCase()) {
       case "GET":
         this.response = await this.apiContext.get(finalEndpoint, {
-          headers: this.currentAuth,
+          headers,
         });
         break;
       case "DELETE":
         this.response = await this.apiContext.delete(finalEndpoint, {
-          headers: this.currentAuth,
+          headers,
         });
         break;
       default:
@@ -41,17 +44,28 @@ When(
 );
 
 When(
-  "I create a new book with title {string} and author {string}",
+  "I have created a book with title {string} and author {string}",
   async function (title, author) {
+    const headers = {
+      ...this.currentAuth,
+    };
+
     this.response = await this.apiContext.post("/api/books", {
       data: { title, author },
-      headers: this.currentAuth,
+      headers,
     });
+
+    // Store the book ID immediately after creation
+    if (this.response.ok()) {
+      const responseData = await this.response.json();
+      this.storedBookId = responseData.id;
+      expect(this.storedBookId).toBeDefined();
+    }
   }
 );
 
 When(
-  "I send a {string} request to {string} with updated details",
+  "I send a {string} request to {string} with updated details:",
   async function (method, endpoint, docString) {
     const finalEndpoint = this.storedBookId
       ? endpoint.replace("{stored-id}", this.storedBookId)
@@ -59,16 +73,20 @@ When(
 
     const data = JSON.parse(docString);
 
-    // if there is id field in the data, and its value is "{stored-id}", replace it with the stored ID
-    if (data.id && data.id === "{stored-id}") {
+    // Replace {stored-id} with actual stored ID if present
+    if (data.id && data.id === "{stored-id}" && this.storedBookId) {
       data.id = this.storedBookId;
     }
+
+    const headers = {
+      ...this.currentAuth,
+    };
 
     switch (method.toUpperCase()) {
       case "PUT":
         this.response = await this.apiContext.put(finalEndpoint, {
           data,
-          headers: this.currentAuth,
+          headers,
         });
         break;
       default:
