@@ -1,11 +1,12 @@
+@api
 Feature: Library API Authentication
-  @api
-  Scenario Outline: Accessing endpoints without authentication
-    When I send a "<method>" request to "<endpoint>" without authentication
+
+  Scenario: Accessing endpoints without authentication
+    When I make an unauthenticated "<method>" request to "<endpoint>"
     Then the response status code should be 401
 
     Examples:
-      | method | endpoint     |
+      | method | endpoint     | 
       | GET    | /api/books   |
       | GET    | /api/books/1 |
       | POST   | /api/books   |

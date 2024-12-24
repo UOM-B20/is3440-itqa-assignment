@@ -6,8 +6,8 @@
   "scripts": {
     "server": "java -jar server/demo-0.0.1-SNAPSHOT.jar",
     "test": "playwright test",
-    "test:ui": "playwright test tests/features/ui/",
-    "test:api": "playwright test tests/features/api/",
+    "test:ui": "cucumber-js --tags @ui",
+    "test:api": "cucumber-js --tags @api",
     "report": "playwright show-report playwright-report"
   },
   "keywords": [],
