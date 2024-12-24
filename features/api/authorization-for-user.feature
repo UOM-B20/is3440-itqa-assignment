@@ -46,3 +46,7 @@ Feature: Book API Authorization for User Role
       | Test Book   | Test Author | 
     When I send a "DELETE" request to "/api/books/{stored-id}"
     Then the response status code should be 200
+
+
+
+
