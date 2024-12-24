@@ -7,6 +7,9 @@ class CustomWorld extends World {
     super(options);
     this.debug = false;
     this.apiContext = null;
+    this.response = null;
+    this.currentAuth = null;
+    this.storedBookId = null;
   }
 
   async initAPI() {
@@ -27,10 +30,7 @@ class CustomWorld extends World {
     // SHUTDOWN SERVER
     await serverUtils.shutdown();
 
-    if (this.apiContext) {
-      await this.apiContext.dispose();
-      this.apiContext = null;
-    }
+    await this.reset();
   }
 
   async initUI() {
@@ -49,6 +49,17 @@ class CustomWorld extends World {
       this.context = null;
       this.page = null;
     }
+  }
+
+  async reset() {
+    if (this.apiContext) {
+      await this.apiContext.dispose();
+      this.apiContext = null;
+    }
+
+    this.response = null;
+    this.currentAuth = null;
+    this.storedBookId = null;
   }
 }
 

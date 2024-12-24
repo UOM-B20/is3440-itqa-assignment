@@ -1,47 +1,37 @@
 @api
-Feature: Book API Authorization for User Role (User can only view all books, create a book, and delete a book)
+Feature: Book API Authorization for User Role
 
   Background: 
     Given the book database is empty
+    And I authenticated as username "user" and password "password"
 
-  Scenario: User can get all books
-    Given I authenticated as username "user" and password "password"
+  Scenario: User can perform allowed operations
+    # First verify GET all works
     When I send a "GET" request to "/api/books"
     Then the response status code should be 200
+    And the response should contain an empty list
 
-  Scenario: User can not view a individual book
-    Given I authenticated as username "user" and password "password"
-    Given the book database has a book with id 1
-    When I send a "GET" request to "/api/books/1"
-    Then the response status code should be 403
-
-  Scenario: User can create a book
-    Given I authenticated as username "user" and password "password"
-    When I send a "POST" request to "/api/books" with the body:
-      """
-      {
-        "title": "Title",
-        "author": "Author"
-      }
-      """
+    # Create a book and verify
+    When I create a new book with title "Test Book" and author "Test Author"
     Then the response status code should be 201
+    And the response should contain the created book details title "Test Book" and author "Test Author"
+    And I store the created book ID
 
-  Scenario: User can not update a book
-    Given I authenticated as username "user" and password "password"
-    Given the book database has a book with id 1
-    When I send a "PUT" request to "/api/books/1" with the body:
-      """
-      {
-        "id": 1,
-        "title": "New Title",
-        "author": "New Author"
-      }
-      """
+    # Try to view the specific book (should fail)
+    When I send a "GET" request to "/api/books/{stored-id}"
     Then the response status code should be 403
 
-  Scenario: User can delete a book
-    Given I authenticated as username "user" and password "password"
-    Given the book database has a book with id 1
-    When I send a "DELETE" request to "/api/books/1"
+    # Try to update the book (should fail)
+    When I send a "PUT" request to "/api/books/{stored-id}" with updated details
+    ```
+    {
+      "id": "{stored-id}",
+      "title": "Updated Test Book",
+      "author": "Updated Test Author"
+    }
+    ```
+    Then the response status code should be 403
+    
+    # Finally delete the book
+    When I send a "DELETE" request to "/api/books/{stored-id}"
     Then the response status code should be 200
-
