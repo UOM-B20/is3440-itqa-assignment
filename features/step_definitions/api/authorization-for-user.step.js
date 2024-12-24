@@ -3,23 +3,14 @@ const { expect } = require("@playwright/test");
 const serverUtils = require("../../support/server-utils");
 
 Given("the book database is empty", async function () {
-  if (!this.apiContext) {
-    await this.initAPI();
-  }
-  await serverUtils.seedDatabase();
-  await serverUtils.clearDatabase();
   const isEmpty = await serverUtils.isDatabaseEmpty();
   expect(isEmpty).toBe(true);
 });
 
 Given("the book database has a book with id 1", async function () {
-  if (!this.apiContext) {
-    await this.initAPI();
-  }
-  await serverUtils.clearDatabase();
   await serverUtils.seedDatabase(1);
 
-  const hasBook = await serverUtils.verfiyBookWithId(1);
+  const hasBook = await serverUtils.hasBookWithId(1);
   expect(hasBook).toBe(false);
 });
 
@@ -33,7 +24,6 @@ Given(
 When(
   "I send a {string} request to {string} with the body:",
   async function (method, endpoint, docString) {
-    // Parse the JSON string to object
     const data = JSON.parse(docString);
 
     switch (method.toUpperCase()) {

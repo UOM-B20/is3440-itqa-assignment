@@ -1,23 +1,6 @@
-const {
-  Before,
-  After,
-  BeforeAll,
-  AfterAll,
-  setDefaultTimeout,
-} = require("@cucumber/cucumber");
-const serverUtils = require("../support/server-utils");
+const { Before, After, setDefaultTimeout } = require("@cucumber/cucumber");
 
 setDefaultTimeout(60 * 1000);
-
-BeforeAll(async () => {
-  await serverUtils.startServer();
-  await serverUtils.init();
-  await serverUtils.clearDatabase();
-});
-
-AfterAll(async () => {
-  await serverUtils.shutdown();
-});
 
 Before(async function ({ pickle }) {
   // UI test setup
@@ -28,7 +11,7 @@ Before(async function ({ pickle }) {
 
   // API test setup
   if (pickle.tags.some((tag) => tag.name === "@api")) {
-    await serverUtils.clearDatabase();
+    await this.initAPI();
   }
 });
 
@@ -40,6 +23,6 @@ After(async function ({ pickle }) {
 
   // API test cleanup
   if (pickle.tags.some((tag) => tag.name === "@api")) {
-    await serverUtils.clearDatabase();
+    await this.closeAPI();
   }
 });
