@@ -38,12 +38,11 @@ class ServerUtils {
   }
 
   async startServer() {
+    const jarPath = path.join(
+      __dirname,
+      "../../server/demo-0.0.1-SNAPSHOT.jar"
+    );
     try {
-      // Try to start server directly first
-      const jarPath = path.join(
-        __dirname,
-        "../../server/demo-0.0.1-SNAPSHOT.jar"
-      );
       this.serverProcess = spawn("java", ["-jar", jarPath], {
         stdio: "ignore",
       });

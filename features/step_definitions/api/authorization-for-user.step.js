@@ -11,7 +11,7 @@ Given("the book database has a book with id 1", async function () {
   await serverUtils.seedDatabase(1);
 
   const hasBook = await serverUtils.hasBookWithId(1);
-  expect(hasBook).toBe(false);
+  expect(hasBook).toBe(true);
 });
 
 Given(
