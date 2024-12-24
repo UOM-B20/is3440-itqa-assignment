@@ -1,3 +1,4 @@
+@api
 Feature: Book API Authorization for User Role (User can only view all books, create a book, and delete a book)
 
   Background: 

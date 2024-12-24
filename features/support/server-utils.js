@@ -7,7 +7,6 @@ const execAsync = util.promisify(exec);
 const BASE_URL = "http://localhost:7081";
 const PORT = 7081;
 const STARTUP_TIMEOUT = 15000;
-const POLL_INTERVAL = 100;
 
 class ServerUtils {
   constructor() {
@@ -50,11 +49,39 @@ class ServerUtils {
       });
 
       // Wait for server to be ready
-      await this.waitForServer();
+      await this.waitForServerV2();
     } catch (error) {
+      // If server start fails, try cleanup and restart once
+      await this.killProcessOnPort();
       await this.shutdown();
-      throw error;
+
+      // One more attempt after cleanup
+      this.serverProcess = spawn("java", ["-jar", jarPath], {
+        stdio: "ignore",
+      });
+      await this.waitForServerV2();
     }
+  }
+
+  async isPortOpen() {
+    return new Promise((resolve) => {
+      const net = require("net");
+      const client = new net.Socket();
+
+      const onError = () => {
+        client.destroy();
+        resolve(false);
+      };
+
+      client.setTimeout(500);
+      client.once("error", onError);
+      client.once("timeout", onError);
+
+      client.connect(PORT, "localhost", () => {
+        client.destroy();
+        resolve(true);
+      });
+    });
   }
 
   async waitForServer() {
@@ -79,6 +106,26 @@ class ServerUtils {
         // Ignore error and continue polling
       } finally {
         await context.dispose();
+      }
+
+      // Quick check if the process has died
+      if (this.serverProcess && this.serverProcess.exitCode !== null) {
+        throw new Error("Server process terminated unexpectedly");
+      }
+
+      await new Promise((r) => setTimeout(r, 100));
+    }
+
+    throw new Error(`Server failed to start within ${STARTUP_TIMEOUT}ms`);
+  }
+
+  async waitForServerV2() {
+    const startTime = Date.now();
+
+    while (Date.now() - startTime < STARTUP_TIMEOUT) {
+      // First check if port is open
+      if (await this.isPortOpen()) {
+        return; // Server is accepting connections
       }
 
       // Quick check if the process has died
