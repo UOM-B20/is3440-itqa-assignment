@@ -3,12 +3,12 @@ Feature: Book API Authorization for User Role
 
   Background: 
     Given the book database is empty
-    And I authenticated as username "user" and password "password"
+    And I am authenticated with username "user" and password "password"
 
   Scenario: User can successfully get all books
     When I send a "GET" request to "/api/books"
     Then the response status code should be 200
-    And the response should contain an empty list
+    And the books list should be empty
 
   Scenario: User can successfully create a new book
     When I have created a book with following details:

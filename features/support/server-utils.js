@@ -237,6 +237,21 @@ class ServerUtils {
       await context.dispose();
     }
   }
+
+  makeRequest(method, endpoint, headers) {
+    switch (method.toUpperCase()) {
+      case "GET":
+        return this.apiContext.get(endpoint, { headers });
+      case "DELETE":
+        return this.apiContext.delete(endpoint, { headers });
+      case "POST":
+        return this.apiContext.post(endpoint, { headers });
+      case "PUT":
+        return this.apiContext.put(endpoint, { headers });
+      default:
+        throw new Error(`Unsupported HTTP method: ${method}`);
+    }
+  }
 }
 
 module.exports = new ServerUtils();

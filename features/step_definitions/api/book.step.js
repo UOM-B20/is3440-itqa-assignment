@@ -25,7 +25,7 @@ When(
   }
 );
 
-Then("the response should contain an empty list", async function () {
+Then("the books list should be empty", async function () {
   const books = await this.response.json();
   expect(Array.isArray(books)).toBe(true);
   expect(books.length).toBe(0);
