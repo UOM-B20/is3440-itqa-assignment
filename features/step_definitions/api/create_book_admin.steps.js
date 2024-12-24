@@ -16,11 +16,14 @@ When(
   }
 );
 
-Then("the response status code should be {int}", async function (statusCode) {
-  expect(this.response.status()).toBe(statusCode);
-});
+Then(
+  "the response status code for creating a book should be {int}",
+  async function (statusCode) {
+    expect(this.response.status()).toBe(statusCode);
+  }
+);
 
-Then("the book details should match:", async function (dataTable) {
+Then("the book details should match for admin:", async function (dataTable) {
   const expectedData = dataTable.hashes()[0];
   const responseData = await this.response.json();
   expect(responseData.title).toBe(expectedData.title);
