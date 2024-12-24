@@ -1,17 +1,36 @@
 const { setWorldConstructor, World } = require("@cucumber/cucumber");
 const { chromium, request } = require("@playwright/test");
+const serverUtils = require("./server-utils");
 
 class CustomWorld extends World {
   constructor(options) {
     super(options);
     this.debug = false;
+    this.apiContext = null;
   }
 
   async initAPI() {
+    // START SERVER EVERYTIME, TO MAKE SURE WE HAVE FRESH DATABASE( IN MEMORY DATABASE)
+    await serverUtils.startServer();
+
+    if (this.apiContext) {
+      await this.apiContext.dispose();
+    }
     this.apiContext = await request.newContext({
-      baseURL: "http://localhost:7081",
+      baseURL: serverUtils.BASE_URL,
+      storageState: undefined,
     });
     return this.apiContext;
+  }
+
+  async closeAPI() {
+    // SHUTDOWN SERVER
+    await serverUtils.shutdown();
+
+    if (this.apiContext) {
+      await this.apiContext.dispose();
+      this.apiContext = null;
+    }
   }
 
   async initUI() {
@@ -21,14 +40,6 @@ class CustomWorld extends World {
       this.page = await this.context.newPage();
     }
     return this.page;
-  }
-
-  async closeAPI() {
-    if (this.apiContext) {
-      await this.apiContext.close();
-      this.apiContext = null;
-      this.apiRequest = null;
-    }
   }
 
   async closeUI() {
