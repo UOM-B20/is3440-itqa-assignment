@@ -1,8 +1,8 @@
-const { When, Then } = require("@cucumber/cucumber");
+const { When, Then, Given } = require("@cucumber/cucumber");
 const { expect } = require("@playwright/test");
 
 When(
-  "I send a {string} request to {string} without authentication",
+  "I make an unauthenticated {string} request to {string}",
   async function (method, endpoint) {
     // EXPLICTLY SETTING HEADERS TO EMPTY OBJECT
     const headers = {};
@@ -40,6 +40,9 @@ When(
   }
 );
 
-Then("the response status code should be {int}", async function (statusCode) {
-  expect(this.response.status()).toBe(statusCode);
-});
+Given(
+  "I am authenticated with username {string} and password {string}",
+  async function (username, password) {
+    this.currentAuth = this.getAuthHeader(username, password);
+  }
+);

@@ -1,52 +1,48 @@
 @api
-Feature: Book API Authorization for User Role
+Feature: Book API Authorization for Admin Role
 
   Background: 
     Given the book database is empty
-    And I am authenticated with username "user" and password "password"
+    And I am authenticated with username "admin" and password "password"
 
-  Scenario: User can successfully get all books
+  Scenario:Admin can successfully get all books
     When I send a "GET" request to "/api/books"
     Then the response status code should be 200
     And the books list should be empty
 
-  Scenario: User can successfully create a new book
+  Scenario: Admin can successfully create a new book
     When I have created a book with following details:
       | title       | author      |
-      | Test Book   | Test Author |
+      | Admin Book  | Admin Author |
     Then the response status code should be 201
     And the book details should match:
       | title       | author      |
-      | Test Book   | Test Author |
+      | Admin Book  | Admin Author |
 
-  Scenario: User cannot view specific book details
+  Scenario: Admin can view specific book details
     Given I have created a book with following details:
       | title       | author      |
-      | Test Book   | Test Author |
+      | Admin Book  | Admin Author |
     When I send a "GET" request to "/api/books/{stored-id}"
-    Then the response status code should be 403
+    Then the response status code should be 200
 
-  Scenario: User cannot update existing book
+  Scenario: Admin can update existing book
     Given I have created a book with following details:
       | title       | author      |
-      | Test Book   | Test Author |
+      | Admin Book  | Admin Author |
     When I update the book with:
       """
       {
         "id": "{stored-id}",
-        "title": "Updated Test Book",
-        "author": "Updated Test Author"
+        "title": "Updated Admin Book",
+        "author": "Updated Admin Author"
       }
       """
-    Then the response status code should be 403
-
-  Scenario: User can delete a book
-    Given I have created a book with following details:
-      | title       | author      |
-      | Test Book   | Test Author | 
-    When I send a "DELETE" request to "/api/books/{stored-id}"
     Then the response status code should be 200
 
-
-
-
+  Scenario: Admin can not delete a book
+    Given I have created a book with following details:
+      | title       | author      |
+      | Admin Book  | Admin Author |  
+    When I send a "DELETE" request to "/api/books/{stored-id}"
+    Then the response status code should be 403

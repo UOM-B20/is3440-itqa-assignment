@@ -7,15 +7,13 @@ class CustomWorld extends World {
     super(options);
     this.debug = false;
     this.apiContext = null;
+    this.response = null;
+    this.currentAuth = null;
+    this.storedBookId = null;
+    this.serverUtils = serverUtils;
   }
 
   async initAPI() {
-    // START SERVER EVERYTIME, TO MAKE SURE WE HAVE FRESH DATABASE( IN MEMORY DATABASE)
-    await serverUtils.startServer();
-
-    if (this.apiContext) {
-      await this.apiContext.dispose();
-    }
     this.apiContext = await request.newContext({
       baseURL: serverUtils.BASE_URL,
       storageState: undefined,
@@ -24,13 +22,7 @@ class CustomWorld extends World {
   }
 
   async closeAPI() {
-    // SHUTDOWN SERVER
-    await serverUtils.shutdown();
-
-    if (this.apiContext) {
-      await this.apiContext.dispose();
-      this.apiContext = null;
-    }
+    await this.reset();
   }
 
   async initUI() {
@@ -49,6 +41,28 @@ class CustomWorld extends World {
       this.context = null;
       this.page = null;
     }
+  }
+
+  getAuthHeader(username, password) {
+    return {
+      Authorization:
+        "Basic " + Buffer.from(`${username}:${password}`).toString("base64"),
+    };
+  }
+
+  async reset() {
+    if (this.apiContext) {
+      await this.apiContext.dispose();
+      this.apiContext = null;
+    }
+
+    this.response = null;
+    this.currentAuth = null;
+    this.storedBookId = null;
+  }
+
+  serverUtils() {
+    return serverUtils;
   }
 }
 

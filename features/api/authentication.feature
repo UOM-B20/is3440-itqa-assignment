@@ -2,7 +2,7 @@
 Feature: Library API Authentication
 
   Scenario: Accessing endpoints without authentication
-    When I send a "<method>" request to "<endpoint>" without authentication
+    When I make an unauthenticated "<method>" request to "<endpoint>"
     Then the response status code should be 401
 
     Examples:

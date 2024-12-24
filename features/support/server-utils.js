@@ -10,7 +10,6 @@ const STARTUP_TIMEOUT = 15000;
 
 class ServerUtils {
   constructor() {
-    this.apiContext = null;
     this.serverProcess = null;
     this.BASE_URL = BASE_URL;
   }
@@ -153,23 +152,6 @@ class ServerUtils {
     };
   }
 
-  async isDatabaseEmpty() {
-    const context = await request.newContext({
-      baseURL: this.BASE_URL,
-      storageState: undefined,
-    });
-
-    try {
-      const response = await context.get("/api/books", {
-        headers: this.getAuthHeader("admin", "password"),
-      });
-      const books = await response.json();
-      return response.ok() && Array.isArray(books) && books.length === 0;
-    } finally {
-      await context.dispose();
-    }
-  }
-
   async seedDatabase(count = 5) {
     const context = await request.newContext({
       baseURL: this.BASE_URL,
@@ -210,14 +192,31 @@ class ServerUtils {
         headers: this.getAuthHeader("admin", "password"),
       });
 
-      if (response.ok()) {
-        const books = await response.json();
-        for (const book of books) {
-          await context.delete(`/api/books/${book.id}`, {
-            headers: this.getAuthHeader("user", "password"),
-          });
+      if (!response.ok()) {
+        throw new Error("Failed to fetch books for deletion");
+      }
+
+      const books = await response.json();
+
+      // if books is an array, and it's empty, return true
+      if (Array.isArray(books) && books.length === 0) {
+        return true;
+      }
+
+      for (const book of books) {
+        await context.delete(`/api/books/${book.id}`, {
+          headers: this.getAuthHeader("user", "password"),
+        });
+
+        if (!response.ok()) {
+          throw new Error(`Failed to delete book with ID: ${book.id}`);
         }
       }
+
+      return true;
+    } catch (error) {
+      console.error("Error clearing database:", error);
+      return false;
     } finally {
       await context.dispose();
     }
@@ -236,6 +235,21 @@ class ServerUtils {
       return response.status() === 200;
     } finally {
       await context.dispose();
+    }
+  }
+
+  makeRequest(method, endpoint, headers) {
+    switch (method.toUpperCase()) {
+      case "GET":
+        return this.apiContext.get(endpoint, { headers });
+      case "DELETE":
+        return this.apiContext.delete(endpoint, { headers });
+      case "POST":
+        return this.apiContext.post(endpoint, { headers });
+      case "PUT":
+        return this.apiContext.put(endpoint, { headers });
+      default:
+        throw new Error(`Unsupported HTTP method: ${method}`);
     }
   }
 }
