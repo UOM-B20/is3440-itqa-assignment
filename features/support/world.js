@@ -10,6 +10,7 @@ class CustomWorld extends World {
     this.response = null;
     this.currentAuth = null;
     this.storedBookId = null;
+    this.serverUtils = serverUtils;
   }
 
   async initAPI() {
@@ -42,6 +43,13 @@ class CustomWorld extends World {
     }
   }
 
+  getAuthHeader(username, password) {
+    return {
+      Authorization:
+        "Basic " + Buffer.from(`${username}:${password}`).toString("base64"),
+    };
+  }
+
   async reset() {
     if (this.apiContext) {
       await this.apiContext.dispose();
@@ -51,6 +59,10 @@ class CustomWorld extends World {
     this.response = null;
     this.currentAuth = null;
     this.storedBookId = null;
+  }
+
+  serverUtils() {
+    return serverUtils;
   }
 }
 
