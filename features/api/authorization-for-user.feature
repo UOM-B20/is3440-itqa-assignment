@@ -10,6 +10,14 @@ Feature: Book API Authorization for User Role
     Then the response status code should be 200
     And the books list should be empty
 
+  @known-bug @bug-2
+  Scenario: User can view specific book details
+    Given I have created a book with following details:
+      | title       | author      |
+      | Test Book   | Test Author |
+    When I send a "GET" request to "/api/books/{stored-id}"
+    Then the response status code should be 200
+
   Scenario: User can successfully create a new book
     When I have created a book with following details:
       | title       | author      |
@@ -18,13 +26,6 @@ Feature: Book API Authorization for User Role
     And the book details should match:
       | title       | author      |
       | Test Book   | Test Author |
-
-  Scenario: User cannot view specific book details
-    Given I have created a book with following details:
-      | title       | author      |
-      | Test Book   | Test Author |
-    When I send a "GET" request to "/api/books/{stored-id}"
-    Then the response status code should be 403
 
   Scenario: User cannot update existing book
     Given I have created a book with following details:
@@ -40,12 +41,14 @@ Feature: Book API Authorization for User Role
       """
     Then the response status code should be 403
 
-  Scenario: User can delete a book
+  @known-bug @bug-3
+  Scenario: User can not delete a book
     Given I have created a book with following details:
       | title       | author      |
       | Test Book   | Test Author | 
     When I send a "DELETE" request to "/api/books/{stored-id}"
-    Then the response status code should be 200
+    Then the response status code should be 403
+
 
 
 
