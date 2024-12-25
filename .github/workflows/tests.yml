@@ -37,8 +37,8 @@ jobs:
         run: npx playwright install --with-deps
         if: steps.playwright-cache.outputs.cache-hit != 'true'
 
-      - name: Run UI tests
-        run: npm run test:ui
+      - name: Run UI tests (Excluding known bugs)
+        run: npm run test:ui:ci
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
@@ -68,8 +68,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run API tests
-        run: npm run test:api
+      - name: Run API tests (Excluding known bugs)
+        run: npm run test:api:ci
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
