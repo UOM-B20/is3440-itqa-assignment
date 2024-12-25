@@ -157,3 +157,7 @@ npm run test:api
    - Delete with user and admin credentials
    - Verify book no longer exists
    - Expected: Success for user, 403 for admin
+
+#### API KNOWN BUGS
+
+Here are some bugs that have been identified in the APIs. `@known-bug` tag is used to mark these scenarios. and the bug details are documented in below.
