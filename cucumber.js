@@ -1,9 +1,8 @@
-// cucumber.js
 module.exports = {
   default: {
     requireModule: ["@babel/register"],
-    require: ["tests/step/**/*.js"],
     format: ["progress-bar", ["html", "cucumber-report/index.html"]],
+    require: ["features/step_definitions/**/*.js", "features/support/**/*.js"],
     formatOptions: {
       snippetInterface: "async-await",
     },

@@ -1,17 +1,28 @@
 const { setWorldConstructor, World } = require("@cucumber/cucumber");
 const { chromium, request } = require("@playwright/test");
+const serverUtils = require("./server-utils");
 
 class CustomWorld extends World {
   constructor(options) {
     super(options);
     this.debug = false;
+    this.apiContext = null;
+    this.response = null;
+    this.currentAuth = null;
+    this.storedBookId = null;
+    this.serverUtils = serverUtils;
   }
 
   async initAPI() {
     this.apiContext = await request.newContext({
-      baseURL: "http://localhost:7081",
+      baseURL: serverUtils.BASE_URL,
+      storageState: undefined,
     });
     return this.apiContext;
+  }
+
+  async closeAPI() {
+    await this.reset();
   }
 
   async initUI() {
@@ -23,14 +34,6 @@ class CustomWorld extends World {
     return this.page;
   }
 
-  async closeAPI() {
-    if (this.apiContext) {
-      await this.apiContext.close();
-      this.apiContext = null;
-      this.apiRequest = null;
-    }
-  }
-
   async closeUI() {
     if (this.browser) {
       await this.browser.close();
@@ -38,6 +41,28 @@ class CustomWorld extends World {
       this.context = null;
       this.page = null;
     }
+  }
+
+  getAuthHeader(username, password) {
+    return {
+      Authorization:
+        "Basic " + Buffer.from(`${username}:${password}`).toString("base64"),
+    };
+  }
+
+  async reset() {
+    if (this.apiContext) {
+      await this.apiContext.dispose();
+      this.apiContext = null;
+    }
+
+    this.response = null;
+    this.currentAuth = null;
+    this.storedBookId = null;
+  }
+
+  serverUtils() {
+    return serverUtils;
   }
 }
 
