@@ -26,7 +26,7 @@ Scenario: Add one product to cart and verify
 
 
 
-    
+
 
   Scenario: Add a product to the cart
     Given I navigate to the URL "http://automationexercise.com"
@@ -35,4 +35,4 @@ Scenario: Add one product to cart and verify
     When I click Continue Shopping
     When I add second product to cart 
     When I click View Cart
-    Then I should see both products in cart
+    Then I should see both products 
