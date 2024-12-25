@@ -89,14 +89,12 @@ npm run test:api:ci
 
 2. **User Role Authorization**
 
-   - Allowed: GET /api/books, POST /api/books, DELETE /api/books/1
-   - Restricted: GET /api/books/1, PUT /api/books/1
+   - Allowed: Only GET and POST operations
+   - Restricted: PUT and DELETE operations
    - Expected: 403 Forbidden for restricted actions
 
 3. **Admin Role Authorization**
-   - Allowed: GET /api/books, GET /api/books/1, POST /api/books, PUT /api/books/1
-   - Restricted: DELETE /api/books/1
-   - Expected: 403 Forbidden for delete action
+   - Allowed: All operations (GET, POST, PUT, DELETE)
 
 ##### 2: Create Book Operations (3 test cases)
 
