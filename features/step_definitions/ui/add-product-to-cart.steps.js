@@ -1,15 +1,6 @@
 const { Given, When, Then } = require("@cucumber/cucumber");
 const { expect } = require("@playwright/test");
 
-When("I click the Products button", async function () {
-  const productBtn = await this.page.locator(
-    "li:has(i.material-icons.card_travel)"
-  );
-  await expect(productBtn).toContainText("Products");
-  await productBtn.click();
-  expect(this.page.url()).toContain("/products");
-});
-
 When("I add first product to cart", async function () {
   await this.page.hover('a[data-product-id="1"]');
   await this.page.click('a[data-product-id="1"].add-to-cart');
