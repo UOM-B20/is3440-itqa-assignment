@@ -10,7 +10,7 @@ Scenario: Add one product to cart and verify
     Then I should see the first product in the cart
 
   Scenario: Add more products to cart and verify
-    Given I navigate to the home page
+    Given I navigate to the URL "http://automationexercise.com"
     When I click the Products button
     And I add the first product to the cart
     And I click Continue Shopping
