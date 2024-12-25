@@ -3,7 +3,7 @@
 Feature: Add Product to Cart
 
 Scenario: Add one product to cart and verify
-    Given I navigate to the home page
+    Given I navigate to the URL "http://automationexercise.com"
     When I click the Products button
     And I add the first product to the cart
     And I click View Cart
