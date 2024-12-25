@@ -4,10 +4,13 @@ on:
     branches: [main, master]
   pull_request:
     branches: [main, master]
+    types: [opened, reopened, ready_for_review, synchronize]
 
 jobs:
   ui-tests:
     name: ui-tests
+    if: ${{ !contains(github.event.head_commit.message, '[skip-tests]') }}
+    # Skip if [skip-tests] is in commit message
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
@@ -35,7 +38,7 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit != 'true'
 
       - name: Run UI tests
-        run: npx cucumber-js tests/features/ui/*.feature
+        run: npm run test:ui
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
@@ -46,6 +49,8 @@ jobs:
 
   api-tests:
     name: api-tests
+    if: ${{ !contains(github.event.head_commit.message, '[skip-tests]') }}
+    # Skip if [skip-tests] is in commit message
     timeout-minutes: 30
     runs-on: ubuntu-latest
     steps:
@@ -64,7 +69,7 @@ jobs:
         run: npm ci
 
       - name: Run API tests
-        run: npx cucumber-js tests/features/api/*.feature
+        run: npm run test:api
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}

@@ -79,16 +79,3 @@ Authorization: Basic <credentials>
 ```
 
 Note: All endpoints require Basic Authentication using the credentials provided in the Authentication section.
-
-## Response Codes
-
-| Status Code | Description                            |
-| ----------- | -------------------------------------- |
-| 200         | Success - Book updated/deleted         |
-| 201         | Success - Book created                 |
-| 400         | Bad Request - Invalid/empty parameters |
-| 401         | Unauthorized - Authentication required |
-| 403         | Forbidden - Insufficient permissions   |
-| 404         | Not Found - Book doesn't exist         |
-
-**Note:** All responses will be returned in JSON format with appropriate HTTP status codes.

@@ -1,114 +1,159 @@
 # IS3440 - ITQA
 
-## HOW TO TEST
-
-### PREREQUISITES
+## PREREQUISITES
 
 - Node.js installed on your machine
 - Java installed on your machine
-- Clone the repository to your local machine
+
+## HOW TO TEST (GENERAL)
+
+- clone the repository to your local machine.
+- run `npm install` to install the dependencies.
+- make sure the prerequisites are installed on your machine.
 
 ### UI TESTING
 
 ### API TESTING
 
-- Create a feature file in the `features/api` directory to define the test scenarios.
-- Write the test scenarios using Gherkin syntax in `steps/api`.
-- Run the tests using the following command:
+#### WRITING API TESTS
 
-  ```bash
-  npx cucumber-js tests/features/api/<feature_file_name>.feature
-  ```
+##### 1. Create Feature Files
 
-## API TEST CASES
+Location: `features/api/*.feature`
 
-**Member 1**: [@kingmalitha]
+```gherkin
+@api
+Feature: Create a Book
+   Scenario: Create new book
+      Given I am authenticated
+      When I create a book
+      Then it should succeed
+```
 
-1. **Authentication Test - Unauthenticated Access**
+##### 2. Define Step Definitions
 
-   - Attempt to access any endpoint without providing credentials
-   - Verify the system returns a 401 Unauthorized status code
+Location: `features/step_definitions/api/`
 
-2. **Authorization Test - User Attempting Delete**
+File naming convention:
 
-   - Use a regular user account to attempt deleting a book
-   - Verify the system returns a 403 Forbidden status code
+- `auth.steps.js` - Authentication steps
+- `book.steps.js` - Book-related steps
+- `common.steps.js` - Shared steps
 
-3. **Positive Test - Create Book (User)**
-   - Create a new book with valid title and author using regular user credentials
-   - Verify the book is created successfully with status code 201
+##### 3. Running Tests
 
-**Member 2**:
+Single feature:
 
-1. **Positive Test - Create Book (Admin)**
+```bash
+npx cucumber-js features/api/books.feature
+```
 
-   - Create a new book with valid title and author using admin credentials
-   - Verify the book is created successfully with status code 201
-   - Check that the returned book object matches the input data
+All API tests:
 
-2. **Positive Test - Update Book (Admin)**
+```bash
+npm run test:api
+```
 
-   - Create a book and then update its title and/or author using admin credentials
-   - Verify the book is updated successfully with status code 200
-   - Confirm the updated book details are correct
+#### API TEST CASES
 
-3. **Positive Test - Delete Book (Admin)**
-   - Create a book and then delete it using admin credentials
-   - Verify the book is deleted successfully with status code 200
-   - Attempt to retrieve the deleted book and confirm it no longer exists
+##### Test Case Assignment
 
-**Member 3**:
+| Index No | Name              | Test Case                      |
+| -------- | ----------------- | ------------------------------ |
+| 204017T  | Maitha Sandaruwan | Authentication & Authorization |
+| 2        |                   | Create Book Operations         |
+| 3        |                   | Update Book Operations         |
+| 4        |                   | Get All Books                  |
+| 5        |                   | Get Single Book                |
+| 6        |                   | Delete Book Operations         |
 
-1. **Positive Test - Get All Books**
+##### 1: Authentication & Authorization (3 test cases)
 
-   - Verify that an authenticated admin user can successfully retrieve the list of all books
-   - Ensure the response contains the correct status code (200)
+1. **Basic Authentication Test**
 
-2. **Positive Test - Get Book by Existing ID**
+   - Endpoint: All endpoints
+   - Action: Attempt access without basic auth
+   - Expected: 401 Unauthorized
 
-   - Create a book and then retrieve it by its ID
-   - Verify the returned book details match the created book
-   - Confirm the response status code is 200
+2. **User Role Authorization**
 
-3. **Boundary Test - Create Book with Minimum Required Information**
-   - Create a book with the minimum required fields (title and author)
-   - Verify the book is created successfully
-   - Check that the book can be retrieved and has the correct details
+   - Allowed: GET /api/books, POST /api/books, DELETE /api/books/1
+   - Restricted: GET /api/books/1, PUT /api/books/1
+   - Expected: 403 Forbidden for restricted actions
 
-**Member 4**: [@isiA99]
+3. **Admin Role Authorization**
+   - Allowed: GET /api/books, GET /api/books/1, POST /api/books, PUT /api/books/1
+   - Restricted: DELETE /api/books/1
+   - Expected: 403 Forbidden for delete action
 
-1. **Negative Test - Create Book with Missing Title**
+##### 2: Create Book Operations (3 test cases)
 
-   - Attempt to create a book without a title
-   - Verify the system returns a 400 Bad Request status code
-   - Check the error message indicates the title is missing
+1. **Successful Book Creation**
 
-2. **Negative Test - Create Book with Missing Author**
-   - Attempt to create a book without an author
-   - Verify the system returns a 400 Bad Request status code
-   - Check the error message indicates the author is missing
+   - Test with both admin and user credentials
+   - Verify response structure and status code
 
-**Member 5**:
+2. **Duplicate Book Prevention**
 
-1. **Negative Test - Update Non-Existent Book**
+   - Create book with same name
+   - Expected: Error response
 
-   - Attempt to update a book with an ID that does not exist
-   - Verify the system returns a 404 Not Found status code
+3. **Invalid Creation Data**
+   - Test cases:
+     - Empty request body
+     - Missing title
+     - Missing author
+   - Expected: Appropriate error responses
 
-2. **Negative Test - Delete Non-Existent Book**
-   - Attempt to delete a book with an ID that does not exist
-   - Verify the system returns a 404 Not Found status code
+##### 3: Update Book Operations (3 test cases)
 
-**Member 6**:
+1. **Non-existent Book Update**
 
-1. **Boundary Test - Create Book with Maximum Allowed Length**
+   - Attempt to update non-existing book
+   - Expected: Not found error
 
-   - Create a book with title and author at the maximum allowed character length
-   - Verify the book is created successfully
-   - Confirm the returned book details match the input
+2. **Successful Update**
 
-2. **Consistency Test - Multiple Book Operations**
-   - Create multiple books in sequence
-   - Retrieve all books and verify the total number matches the number of books created
-   - Update and delete some books
-   - Confirm the book list reflects the changes accurately
+   - Update with admin and user credentials
+   - Verify updated data matches request
+
+3. **Invalid Update Data**
+   - Test cases:
+     - Missing title
+     - Missing author
+     - Empty body
+
+##### 4: Get All Books (2 test cases)
+
+1. **Empty and Seeded Database**
+
+   - Get all books with empty DB
+   - Seed DB and verify results
+   - Test with both user and admin
+
+2. **Sequential ID Verification**
+   - Create multiple books
+   - Verify ID sequence (e.g., 4,5,6 or 8,9,10)
+
+##### 5: Get Single Book (2 test cases)
+
+1. **Non-existent Book Retrieval**
+
+   - Test with both user and admin
+   - Expected: Not found error
+
+2. **Existing Book Retrieval**
+   - Test with admin credentials
+   - Verify response data structure
+
+##### 6: Delete Book Operations (2 test cases)
+
+1. **Non-existent Book Deletion**
+
+   - Attempt to delete non-existing book
+   - Expected: Not found error
+
+2. **Successful Book Deletion**
+   - Delete with user and admin credentials
+   - Verify book no longer exists
+   - Expected: Success for user, 403 for admin
