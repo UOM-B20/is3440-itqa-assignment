@@ -17,6 +17,7 @@ Feature: Book Creation API Operations
       | Admin Book | Admin Author |
 
   @admin
+  @known-bug @bug-1
   Scenario: Admin fails to create a duplicate book
     Given I am authenticated with username "admin" and password "password"
     And I have created a book with following details:
@@ -28,6 +29,7 @@ Feature: Book Creation API Operations
     Then the response status code should be 409
 
   @admin @invalid-data
+  @known-bug @bug-2
   Scenario Outline: Admin fails to create a book with invalid data
     Given I am authenticated with username "admin" and password "password"
     When I create a book with invalid data:
@@ -53,6 +55,7 @@ Feature: Book Creation API Operations
       | User Book | User Author |
 
   @user
+  @known-bug @bug-3
   Scenario: User fails to create a duplicate book
     Given I am authenticated with username "user" and password "password"
     And I have created a book with following details:
@@ -64,6 +67,7 @@ Feature: Book Creation API Operations
     Then the response status code should be 409
 
   @user @invalid-data
+  @known-bug @bug-4
   Scenario Outline: User fails to create a book with invalid data
     Given I am authenticated with username "user" and password "password"
     When I create a book with invalid data:
