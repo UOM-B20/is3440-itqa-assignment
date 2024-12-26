@@ -17,8 +17,8 @@ When(
         this.response = await this.apiContext.post(endpoint, {
           headers,
           data: {
-            title: "Test Book",
-            author: "Test Author",
+            title: "Admin Book",
+            author: "Admin Author",
           },
         });
         break;
