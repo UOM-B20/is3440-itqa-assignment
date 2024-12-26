@@ -48,10 +48,22 @@ Single feature:
 npx cucumber-js features/api/books.feature
 ```
 
+Single feature: (excluding known bugs)
+
+```bash
+npx cucumber-js features/api/books.feature --tags "not @known-bug"
+```
+
 All API tests:
 
 ```bash
 npm run test:api
+```
+
+All API tests: (excluding known bugs)
+
+```bash
+npm run test:api:ci
 ```
 
 #### API TEST CASES
@@ -77,14 +89,12 @@ npm run test:api
 
 2. **User Role Authorization**
 
-   - Allowed: GET /api/books, POST /api/books, DELETE /api/books/1
-   - Restricted: GET /api/books/1, PUT /api/books/1
+   - Allowed: Only GET and POST operations
+   - Restricted: PUT and DELETE operations
    - Expected: 403 Forbidden for restricted actions
 
 3. **Admin Role Authorization**
-   - Allowed: GET /api/books, GET /api/books/1, POST /api/books, PUT /api/books/1
-   - Restricted: DELETE /api/books/1
-   - Expected: 403 Forbidden for delete action
+   - Allowed: All operations (GET, POST, PUT, DELETE)
 
 ##### 2: Create Book Operations (3 test cases)
 
@@ -157,3 +167,31 @@ npm run test:api
    - Delete with user and admin credentials
    - Verify book no longer exists
    - Expected: Success for user, 403 for admin
+
+#### API KNOWN BUGS
+
+Here are some bugs that have been identified in the APIs. `@known-bug` tag is used to mark these scenarios. and the bug details are documented in below.
+
+1. BUG-1: **Admin cannot delete book** (Authorization Bug)
+
+   - **Issue**: Admin cannot delete books. According to docs, admins should be able to do `GET`, `POST`, `PUT` and `DELETE` operations. (all operations)
+   - **Location**: features/api/authorization-for-admin.feature
+   - **Expected**: 200 OK, book deleted
+   - **Current**: 403 Forbidden
+   - **Test**: `@known-bug @bug-1`
+
+2. BUG-2: **User cannot view specific book** (Authorization Bug)
+
+   - **Issue**: User cannot access individual book details. According to docs, users should be able to do `GET` and `POST` operations.
+   - **Location**: features/api/authorization-for-user.feature
+   - **Expected**: 200 OK (Users should be able view specific books)
+   - **Current**: 403 Forbidden (Access granted incorrectly)
+   - **Test**: `@known-bug @bug-2`
+
+3. BUG-3: **User can delete books** (Authorization Bug)
+
+   - **Issue**: Users can delete books. According to docs, users should be able to do `GET` and `POST` operations.
+   - **Location**: authorization-for-user.feature
+   - **Expected**: 403 Forbidden (Users shouldn't delete books)
+   - **Current**: 200 OK (Delete allowed incorrectly)
+   - **Test**: `@known-bug @bug-3`

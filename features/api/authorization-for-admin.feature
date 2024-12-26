@@ -40,9 +40,10 @@ Feature: Book API Authorization for Admin Role
       """
     Then the response status code should be 200
 
-  Scenario: Admin can not delete a book
+  @known-bug @bug-1
+  Scenario: Admin can delete a book
     Given I have created a book with following details:
       | title       | author      |
       | Admin Book  | Admin Author |  
     When I send a "DELETE" request to "/api/books/{stored-id}"
-    Then the response status code should be 403
+    Then the response status code should be 200
