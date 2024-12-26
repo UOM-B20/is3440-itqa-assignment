@@ -27,7 +27,7 @@ Feature: Book API Authorization for User Role
       | Test Book | Test Author |
 
 
-    
+
   Scenario: User cannot update existing book
     When I have created a book with following details:
       | title     | author      |
@@ -50,7 +50,10 @@ Feature: Book API Authorization for User Role
     When I send a "DELETE" request to "/api/books/{stored-id}"
     Then the response status code should be 403
 
-
-
-
-
+  @known-bug @bug-4
+  Scenario: User can retrive non-existent book details
+    When I have created a book with following details:
+      | title     | author      |
+      | Test Book | Test Author |
+    When I send a "GET" request to "/api/books/{stored-id}"
+    Then the response status code should be 404

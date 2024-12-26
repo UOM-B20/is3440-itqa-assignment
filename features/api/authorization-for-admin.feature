@@ -48,12 +48,12 @@ Feature: Book API Authorization for Admin Role
     Then the response status code should be 200
 
   Scenario: Admin can retrive non-existent book details
-    When I have created a book with following details:
-      | title      | author       |
-      | Admin Book | Admin Author |
     When I send a "GET" request to "/api/books/{stored-id}"
     Then the response status code should be 404
 
   Scenario: Admin can retrieve an existing book
+    When I have created a book with following details:
+      | title      | author       |
+      | Admin Book | Admin Author |
     When I send a "GET" request to "/api/books/{stored-id}"
     Then the response status code should be 200
