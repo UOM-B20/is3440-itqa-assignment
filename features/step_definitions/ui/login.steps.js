@@ -1,13 +1,6 @@
 const { Given, When, Then } = require("@cucumber/cucumber");
 const { expect } = require("@playwright/test");
 
-Given("I navigate to the URL {string}", async function (url) {
-  await this.page.goto(url, {
-    waitUntil: "networkidle",
-    timeout: 60000,
-  });
-});
-
 When("I enter email {string}", async function (email) {
   await this.page.fill('input[data-qa="login-email"]', email);
 });
