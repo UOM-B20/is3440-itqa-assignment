@@ -130,3 +130,24 @@ When(
     }
   }
 );
+
+Then("the book details should match:", async function (dataTable) {
+  try {
+    const expectedData = dataTable.hashes()[0];
+    const responseData = await this.response.json();
+    expect(responseData).toBeDefined();
+    expect(responseData).toHaveProperty("id");
+    expect(responseData).toHaveProperty("title");
+    expect(responseData).toHaveProperty("author");
+    expect(responseData.title).toBe(expectedData.title);
+    expect(responseData.author).toBe(expectedData.author);
+    expect(typeof responseData.id).toBe("number");
+    expect(typeof responseData.title).toBe("string");
+    expect(typeof responseData.author).toBe("string");
+    expect(responseData.title.length).toBeGreaterThan(0);
+    expect(responseData.author.length).toBeGreaterThan(0);
+  } catch (error) {
+    console.error("Error validating book details:", error);
+    throw error;
+  }
+});

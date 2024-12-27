@@ -143,7 +143,7 @@ Then(
     // Verify URL
     const encodedName = uiUtils.encodeForUrl(this.brandName);
     expect(this.page.url()).toBe(
-      ` https://automationexercise.com/brand_products/${encodedName}`
+      `https://automationexercise.com/brand_products/${encodedName}`
     );
 
     // Verify brand title

@@ -54,11 +54,3 @@ When(
     }
   }
 );
-
-Then("the book details should match:", async function (dataTable) {
-  const expectedData = dataTable.hashes()[0];
-
-  const responseData = await this.response.json();
-  expect(responseData.title).toBe(expectedData.title);
-  expect(responseData.author).toBe(expectedData.author);
-});
