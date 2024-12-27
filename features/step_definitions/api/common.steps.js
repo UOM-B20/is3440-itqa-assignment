@@ -56,30 +56,6 @@ When(
   }
 );
 
-When(
-  "I have created a book with following details:",
-  async function (dataTable) {
-    const headers = {
-      ...this.currentAuth,
-    };
-
-    const bookData = dataTable.hashes()[0];
-    const { title, author } = bookData;
-
-    this.response = await this.apiContext.post("/api/books", {
-      data: { title, author },
-      headers,
-    });
-
-    // Store the book ID immediately after creation
-    if (this.response.ok()) {
-      const responseData = await this.response.json();
-      this.storedBookId = responseData.id;
-      expect(this.storedBookId).toBeDefined();
-    }
-  }
-);
-
 Then("the book details should match:", async function (dataTable) {
   const expectedData = dataTable.hashes()[0];
 
