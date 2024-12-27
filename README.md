@@ -195,3 +195,35 @@ Here are some bugs that have been identified in the APIs. `@known-bug` tag is us
    - **Expected**: 403 Forbidden (Users shouldn't delete books)
    - **Current**: 200 OK (Delete allowed incorrectly)
    - **Test**: `@known-bug @bug-3`
+
+4. BUG-4: **Duplicate Book Creation (Admin)** (Data Validation Bug)
+
+   - **Issue**: Incorrect status code.
+   - **Location**: features/api/books.feature
+   - **Expected**: 409 Conflict (Duplicate book creation)
+   - **Current**: 208 Already Reported (Incorrect status code)
+   - **Test**: `@known-bug @bug-4`
+
+5. BUG-5: **Invalid Book Creation (Admin)** (Data Validation Bug)
+
+   - **Issue**: Admin can create books with invalid data.
+   - **Location**: features/api/books.feature
+   - **Expected**: 400 Bad Request (Invalid data)
+   - **Current**: 201 Created (Incorrect status code)
+   - **Test**: `@known-bug @bug-5`
+
+6. BUG-6: **Duplicate Book Creation (User)** (Data Validation Bug)
+
+   - **Issue**: Incorrect status code.
+   - **Location**: features/api/books.feature
+   - **Expected**: 409 Conflict (Duplicate book creation)
+   - **Current**: 208 Already Reported (Incorrect status code)
+   - **Test**: `@known-bug @bug-6`
+
+7. BUG-5: **Invalid Book Creation (User)** (Data Validation Bug)
+
+   - **Issue**: User can create books with invalid data.
+   - **Location**: features/api/books.feature
+   - **Expected**: 400 Bad Request (Invalid data)
+   - **Current**: 201 Created (Incorrect status code)
+   - **Test**: `@known-bug @bug-7`
