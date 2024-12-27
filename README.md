@@ -13,6 +13,51 @@
 
 ### UI TESTING
 
+#### UI TEST CASES
+
+##### Test Case Assignment (UI)
+
+| Index No | Name | Test Case                     |
+| -------- | ---- | ----------------------------- |
+| 2        |      | Product Catalog Viewing UI    |
+| 2        |      | Cart UI                       |
+| 3        |      | Search & Product Discovery UI |
+| 4        |      | Checkout UI                   |
+| 5        |      | Forms UI                      |
+
+##### 1. Product Catalog Viewing UI (3 test cases)
+
+1. **View product details**
+2. **View Category Products**
+3. **View Brand Products**
+
+##### 2. Cart UI (3 test cases)
+
+1. **Add Products in Cart**
+2. **Verify Product quantity in Cart**
+3. **Remove Products From Cart**
+
+##### 3. Search & Product Discovery UI (3 test cases)
+
+1. **Search Product**
+2. **Add review on product**
+3. **Add to cart from Recommended items**
+
+##### 4. Checkout UI (2 test cases)
+
+1. **Do the checkout after login**
+2. **Download the invoice**
+
+##### 5. Forms UI (2 test cases)
+
+1. **Contact Us Form**
+2. **Verify Subscription newsletter**
+
+##### 6. Navigation UI (2 test cases)
+
+1. **Scroll Up using 'Arrow' button**
+2. **Scroll Up without 'Arrow' button**
+
 ### API TESTING
 
 #### WRITING API TESTS
@@ -68,7 +113,7 @@ npm run test:api:ci
 
 #### API TEST CASES
 
-##### Test Case Assignment
+##### Test Case Assignment (API)
 
 | Index No | Name              | Test Case                      |
 | -------- | ----------------- | ------------------------------ |

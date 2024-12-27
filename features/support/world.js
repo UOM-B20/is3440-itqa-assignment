@@ -11,6 +11,7 @@ class CustomWorld extends World {
     this.currentAuth = null;
     this.storedBookId = null;
     this.serverUtils = serverUtils;
+    this.UI_BASE_URL = "https://automationexercise.com";
   }
 
   async initAPI() {
@@ -30,6 +31,8 @@ class CustomWorld extends World {
       this.browser = await chromium.launch({ headless: true });
       this.context = await this.browser.newContext();
       this.page = await this.context.newPage();
+      // go to the base URL
+      await this.page.goto(this.UI_BASE_URL);
     }
     return this.page;
   }
