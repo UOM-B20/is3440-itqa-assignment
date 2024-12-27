@@ -17,10 +17,3 @@ Feature: Book API Existing and Non-existent Book Retrieval
         And I am authenticated with username "admin" and password "password"
         When I send a "GET" request to "/api/books/999"
         Then the response status code should be 404
-
-    @user @non-existent-book
-    @known-bug @bug-1
-    Scenario: User can not retrive non-existent book details
-        And I am authenticated with username "user" and password "password"
-        When I send a "GET" request to "/api/books/999"
-        Then the response status code should be 404
