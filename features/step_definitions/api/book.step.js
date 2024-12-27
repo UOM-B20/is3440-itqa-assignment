@@ -98,35 +98,36 @@ When(
       ...this.currentAuth,
     };
 
-    const bookData = dataTable.hashes()[0];
     let requestData = {};
 
-    // Handle title
-    if (bookData.title !== "<omit>") {
-      if (bookData.title === "null") {
-        bookData.title = null;
+    try {
+      const bookData = dataTable.hashes()[0];
+
+      if (bookData.title !== "<omit>") {
+        requestData.title = bookData.title === "null" ? null : bookData.title;
       }
-      requestData.title = bookData.title;
-    }
 
-    // Handle author
-    if (bookData.author !== "<omit>") {
-      if (bookData.author === "null") {
-        bookData.author = null;
+      if (bookData.author !== "<omit>") {
+        requestData.author = bookData.author === "null" ? null : bookData.author;
       }
-      requestData.author = bookData.author;
-    }
+      
+      this.response = await this.apiContext.post("/api/books", {
+        data: requestData,
+        headers,
+        failOnStatusCode: false, 
+      });
 
-    this.response = await this.apiContext.post("/api/books", {
-      data: requestData,
-      headers,
-    });
-
-    // Store the book ID immediately after creation
-    if (this.response.ok() && this.response.status() === 201) {
-      const responseData = await this.response.json();
-      this.storedBookId = responseData.id;
-      expect(this.storedBookId).toBeDefined();
+      if (this.response.status() === 201) {
+        const responseData = await this.response.json();
+        this.storedBookId = responseData.id;
+        expect(this.storedBookId).toBeDefined();
+        expect(typeof this.storedBookId).toBe("number");
+      } else {
+        throw new Error(`Failed to create book. Status code: ${this.response.status()}`);
+      }
+    } catch (error) {
+      console.error("Error creating book:", error);
+      throw error;
     }
   }
 );
