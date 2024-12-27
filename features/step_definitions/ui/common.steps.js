@@ -39,6 +39,36 @@ When("I navigate to {string} page", async function (pageName) {
   expect(this.page.url()).toContain(`/${pageName.toLowerCase()}`);
 });
 
+Then(
+  "I verify that {string} section are visible on left side bar",
+  async function (section) {
+    // Verify sidebar container
+    const sidebar = await this.page.locator(".left-sidebar");
+    await expect(sidebar).toBeVisible();
+
+    // Verify section header
+    const sectionHeader = sidebar.locator("h2", { hasText: section });
+    await expect(sectionHeader).toBeVisible();
+
+    // Verify content based on section type
+    if (section.toLowerCase() === "category") {
+      const categoryContainer = sidebar.locator(".category-products");
+      await expect(categoryContainer).toBeVisible();
+
+      // Verify at least one category exists
+      const categories = await sidebar.locator(".panel-default").all();
+      expect(categories.length).toBeGreaterThan(0, "No categories found");
+    } else if (section.toLowerCase() === "brands") {
+      const brandsContainer = sidebar.locator(".brands-name");
+      await expect(brandsContainer).toBeVisible();
+
+      // Verify at least one brand exists
+      const brands = await sidebar.locator(".brands-name li").all();
+      expect(brands.length).toBeGreaterThan(0, "No brands found");
+    }
+  }
+);
+
 async function viewProductDetailsForEachProduct(page) {
   const productCount = await page
     .locator(".features_items .product-image-wrapper")
