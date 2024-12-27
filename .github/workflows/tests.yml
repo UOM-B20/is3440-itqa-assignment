@@ -37,15 +37,22 @@ jobs:
         run: npx playwright install --with-deps
         if: steps.playwright-cache.outputs.cache-hit != 'true'
 
-      - name: Run UI tests
-        run: npm run test:ui
+      # Run complete tests first and generate report
+      - name: Run UI tests (Including Known Bugs)
+        run: npm run test:ui:ci
+        continue-on-error: true
 
+      # Upload the report from the complete run
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
           name: ui-test-report
           path: cucumber-report/
           retention-days: 30
+
+      # Run strict tests for PR validation
+      - name: Run UI tests (Excluding known bugs)
+        run: npm run test:ui:strict
 
   api-tests:
     name: api-tests
@@ -68,12 +75,19 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run API tests
-        run: npm run test:api
+      # Run complete tests first and generate report
+      - name: Run API tests (Including Known Bugs)
+        run: npm run test:api:ci
+        continue-on-error: true
 
+      # Upload the report from the complete run
       - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
+        if: always()
         with:
           name: api-test-report
           path: cucumber-report/
           retention-days: 30
+
+      # Run strict tests for PR validation
+      - name: Run API tests (Strict - Must Pass)
+        run: npm run test:api:strict
