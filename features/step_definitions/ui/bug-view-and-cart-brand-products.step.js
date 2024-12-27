@@ -1,31 +1,51 @@
 const { When, Then } = require("@cucumber/cucumber");
 const { expect } = require("@playwright/test");
 
-Then("I verify that Brands are visible on left side bar", async function () {
-    const brandsSidebar = await this.page.locator('.brands_products');
-    await expect(brandsSidebar).toBeVisible();
+When("I click on random brand name", async function () {
+  // Get all brand links
+  const brandLinks = await this.page.locator(".brands-name ul li a").all();
+  expect(brandLinks.length).toBeGreaterThan(0, "No brands found");
+
+  // Select random brand
+  const randomIndex = Math.floor(Math.random() * brandLinks.length);
+  const randomBrand = brandLinks[randomIndex];
+
+  // Store brand details
+  const href = await randomBrand.getAttribute("href");
+  this.brandName = href.split("/").pop();
+
+  // Get product count from span
+  const countSpan = await randomBrand.locator("span").textContent();
+  this.expectedCount = parseInt(countSpan.match(/\((\d+)\)/)[1]);
+
+  // Click brand link
+  await randomBrand.click();
 });
 
-When("I click on {string} brand link", async function (brandName) {
-    brandLink = await this.page.locator(`a[href="/brand_products/${brandName}"]`);
-    await brandLink.click();
-  
-});
+Then(
+  "I verify that user is navigated to brand page and brand products are displayed",
+  async function () {
+    // Verify URL
+    const encodedName = uiUtils.encodeForUrl(this.brandName);
+    expect(this.page.url()).toBe(
+      https://automationexercise.com/brand_products/${encodedName}
+    );
 
-Then("I verify that user is navigated to {string} brand page and brand products are displayed", async function (brandName) {
-    const expectedURL = `https://automationexercise.com/brand_products/${brandName}`;
-    const actualURL = this.page.url();
+    // Verify brand title
+    const brandTitle = this.page.locator("h2.title.text-center");
+    await expect(brandTitle).toContainText(
+      Brand - ${this.brandName} Products
+    );
+  }
+);
 
-    // Compare expected and actual URLs and report bug if mismatch occurs
-    if (actualURL !== expectedURL) {
-        console.log("Bug Report: URL mismatch detected for brand navigation.");
-        console.error(`Bug Detected: Expected URL "${expectedURL}" but got "${actualURL}".`);
-        console.log(`Brand Name: "${brandName}"`);
-        console.log(`Expected URL: "${expectedURL}"`);
-        console.log(`Actual URL: "${actualURL}"`);
-        console.log("This issue needs to handle URL encoding for spaces correctly.");
-    }
+Then(
+  "I verify that items count near the brand name is correct match with the products displayed",
+  async function () {
+    // Count actual products
+    const products = await this.page.locator(".product-image-wrapper").all();
 
-    const brandTitle = await this.page.locator('h2.title.text-center');
-    await expect(brandTitle).toContainText(`Brand - ${brandName} Products`);
-});
+    // Verify count matches expected
+    expect(products.length).toBe(this.expectedCount);
+  }
+);
