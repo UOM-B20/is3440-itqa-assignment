@@ -9,13 +9,13 @@ const serverUtils = require("./server-utils");
 
 setDefaultTimeout(60 * 1000);
 
-// BeforeAll({ tags: "@api" }, async function () {
-//   await serverUtils.startServer();
-// });
+BeforeAll({ tags: "@api" }, async function () {
+  await serverUtils.startServer();
+});
 
-// AfterAll({ tags: "@api" }, async function () {
-//   await serverUtils.shutdown();
-// });
+AfterAll({ tags: "@api" }, async function () {
+  await serverUtils.shutdown();
+});
 
 Before(async function ({ pickle }) {
   // UI test setup
