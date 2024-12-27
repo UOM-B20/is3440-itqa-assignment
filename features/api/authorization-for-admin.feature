@@ -41,9 +41,17 @@ Feature: Book API Authorization for Admin Role
 
   @known-bug @bug-1
   Scenario: Admin can delete a book
-    When I have created a book with following details:
-      | title      | author       |
-      | Admin Book | Admin Author |
+    """
+    Bug Details:
+    ID: 1
+    Status: Open
+    Expected: Admin should be able to delete books (200)
+    Actual: Permission denied (403)
+    Impact: High - Blocks admin book management
+    """
+    Given I have created a book with following details:
+      | title       | author      |
+      | Admin Book  | Admin Author |  
     When I send a "DELETE" request to "/api/books/{stored-id}"
     Then the response status code should be 200
 

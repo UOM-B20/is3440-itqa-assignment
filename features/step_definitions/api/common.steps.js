@@ -2,6 +2,20 @@ const { When, Then, Given } = require("@cucumber/cucumber");
 const { expect } = require("@playwright/test");
 const serverUtils = require("../../support/server-utils");
 
+
+Then("the response status code should be {int}", async function (statusCode) {
+  try {
+    expect(this.response.status()).toBe(statusCode);
+  } catch (error) {
+    throw new Error(
+      `Status Code Mismatch
+       Expected: ${statusCode} 
+       Received: ${this.response.status()}
+      `.replace(/^\s+/gm, "")
+    );
+  }
+});
+
 Given("the book database is empty", async function () {
   const cleaned = await serverUtils.clearDatabase();
   expect(cleaned).toBe(true);

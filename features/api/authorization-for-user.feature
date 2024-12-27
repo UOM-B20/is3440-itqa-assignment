@@ -11,9 +11,17 @@ Feature: Book API Authorization for User Role
 
   @known-bug @bug-2
   Scenario: User can view specific book details
-    When I have created a book with following details:
-      | title     | author      |
-      | Test Book | Test Author |
+    """
+    Bug Details:
+    ID: 2
+    Status: Open
+    Expected: User should be able to view book details (200)
+    Actual: Permission denied (403)
+    Impact: High - Blocks basic user functionality
+    """
+    Given I have created a book with following details:
+      | title       | author      |
+      | Test Book   | Test Author |
     When I send a "GET" request to "/api/books/{stored-id}"
     Then the response status code should be 200
 
@@ -44,9 +52,17 @@ Feature: Book API Authorization for User Role
 
   @known-bug @bug-3
   Scenario: User can not delete a book
-    When I have created a book with following details:
-      | title     | author      |
-      | Test Book | Test Author |
+    """
+    Bug Details:
+    ID: 3
+    Status: Open
+    Expected: User should be denied deletion (403)
+    Actual: Operation succeeds (200)
+    Impact: Critical - Security vulnerability
+    """
+    Given I have created a book with following details:
+      | title       | author      |
+      | Test Book   | Test Author | 
     When I send a "DELETE" request to "/api/books/{stored-id}"
     Then the response status code should be 403
 
