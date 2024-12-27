@@ -1,5 +1,4 @@
-@ui @known-bug @bug-1
-
+@ui
 Feature: Report Brand Navigation Bug
 
     Background:
