@@ -17,13 +17,13 @@
 
 ##### Test Case Assignment (UI)
 
-| Index No | Name | Test Case                     |
-| -------- | ---- | ----------------------------- |
-| 2        |      | Product Catalog Viewing UI    |
-| 2        |      | Cart UI                       |
-| 3        |      | Search & Product Discovery UI |
-| 4        |      | Checkout UI                   |
-| 5        |      | Forms UI                      |
+| Index No | Name                | Test Case                     |
+| -------- | ------------------- | ----------------------------- |
+| 2        |                     | Product Catalog Viewing UI    |
+| 2        |                     | Cart UI                       |
+| 3        |                     | Search & Product Discovery UI |
+| 204184B  | Sachin Samararathna | Checkout UI                   |
+| 5        |                     | Forms UI                      |
 
 ##### 1. Product Catalog Viewing UI (3 test cases)
 
@@ -115,14 +115,14 @@ npm run test:api:ci
 
 ##### Test Case Assignment (API)
 
-| Index No | Name              | Test Case                      |
-| -------- | ----------------- | ------------------------------ |
-| 204017T  | Maitha Sandaruwan | Authentication & Authorization |
-| 2        |                   | Create Book Operations         |
-| 3        |                   | Update Book Operations         |
-| 4        |                   | Get All Books                  |
-| 5        |                   | Get Single Book                |
-| 6        |                   | Delete Book Operations         |
+| Index No | Name                | Test Case                      |
+| -------- | ------------------- | ------------------------------ |
+| 204017T  | Maitha Sandaruwan   | Authentication & Authorization |
+| 204184B  | Sachin Samararathna | Create Book Operations         |
+| 3        |                     | Update Book Operations         |
+| 4        |                     | Get All Books                  |
+| 5        |                     | Get Single Book                |
+| 6        |                     | Delete Book Operations         |
 
 ##### 1: Authentication & Authorization (3 test cases)
 
