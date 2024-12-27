@@ -38,6 +38,14 @@ Feature: Book API Authorization for Admin Role
 
   @known-bug @bug-1
   Scenario: Admin can delete a book
+    """
+    Bug Details:
+    ID: 1
+    Status: Open
+    Expected: Admin should be able to delete books (200)
+    Actual: Permission denied (403)
+    Impact: High - Blocks admin book management
+    """
     Given I have created a book with following details:
       | title       | author      |
       | Admin Book  | Admin Author |  

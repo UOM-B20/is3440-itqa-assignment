@@ -11,6 +11,14 @@ Feature: Book API Authorization for User Role
 
   @known-bug @bug-2
   Scenario: User can view specific book details
+    """
+    Bug Details:
+    ID: 2
+    Status: Open
+    Expected: User should be able to view book details (200)
+    Actual: Permission denied (403)
+    Impact: High - Blocks basic user functionality
+    """
     Given I have created a book with following details:
       | title       | author      |
       | Test Book   | Test Author |
@@ -40,6 +48,14 @@ Feature: Book API Authorization for User Role
 
   @known-bug @bug-3
   Scenario: User can not delete a book
+    """
+    Bug Details:
+    ID: 3
+    Status: Open
+    Expected: User should be denied deletion (403)
+    Actual: Operation succeeds (200)
+    Impact: Critical - Security vulnerability
+    """
     Given I have created a book with following details:
       | title       | author      |
       | Test Book   | Test Author | 
