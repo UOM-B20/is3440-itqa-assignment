@@ -74,10 +74,6 @@ When(
   }
 );
 
-Then("the response status code should be {int}", async function (statusCode) {
-  expect(this.response.status()).toBe(statusCode);
-});
-
 Then("the book details should match:", async function (dataTable) {
   const expectedData = dataTable.hashes()[0];
 
