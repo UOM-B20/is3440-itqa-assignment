@@ -13,6 +13,51 @@
 
 ### UI TESTING
 
+#### UI TEST CASES
+
+##### Test Case Assignment (UI)
+
+| Index No | Name | Test Case                     |
+| -------- | ---- | ----------------------------- |
+| 2        |      | Product Catalog Viewing UI    |
+| 2        |      | Cart UI                       |
+| 3        |      | Search & Product Discovery UI |
+| 4        |      | Checkout UI                   |
+| 5        |      | Forms UI                      |
+
+##### 1. Product Catalog Viewing UI (3 test cases)
+
+1. **View product details**
+2. **View Category Products**
+3. **View Brand Products**
+
+##### 2. Cart UI (3 test cases)
+
+1. **Add Products in Cart**
+2. **Verify Product quantity in Cart**
+3. **Remove Products From Cart**
+
+##### 3. Search & Product Discovery UI (3 test cases)
+
+1. **Search Product**
+2. **Add review on product**
+3. **Add to cart from Recommended items**
+
+##### 4. Checkout UI (2 test cases)
+
+1. **Do the checkout after login**
+2. **Download the invoice**
+
+##### 5. Forms UI (2 test cases)
+
+1. **Contact Us Form**
+2. **Verify Subscription newsletter**
+
+##### 6. Navigation UI (2 test cases)
+
+1. **Scroll Up using 'Arrow' button**
+2. **Scroll Up without 'Arrow' button**
+
 ### API TESTING
 
 #### WRITING API TESTS
@@ -68,7 +113,7 @@ npm run test:api:ci
 
 #### API TEST CASES
 
-##### Test Case Assignment
+##### Test Case Assignment (API)
 
 | Index No | Name              | Test Case                      |
 | -------- | ----------------- | ------------------------------ |
@@ -195,3 +240,35 @@ Here are some bugs that have been identified in the APIs. `@known-bug` tag is us
    - **Expected**: 403 Forbidden (Users shouldn't delete books)
    - **Current**: 200 OK (Delete allowed incorrectly)
    - **Test**: `@known-bug @bug-3`
+
+4. BUG-4: **Duplicate Book Creation (Admin)** (Data Validation Bug)
+
+   - **Issue**: Incorrect status code.
+   - **Location**: features/api/books.feature
+   - **Expected**: 409 Conflict (Duplicate book creation)
+   - **Current**: 208 Already Reported (Incorrect status code)
+   - **Test**: `@known-bug @bug-4`
+
+5. BUG-5: **Invalid Book Creation (Admin)** (Data Validation Bug)
+
+   - **Issue**: Admin can create books with invalid data.
+   - **Location**: features/api/books.feature
+   - **Expected**: 400 Bad Request (Invalid data)
+   - **Current**: 201 Created (Incorrect status code)
+   - **Test**: `@known-bug @bug-5`
+
+6. BUG-6: **Duplicate Book Creation (User)** (Data Validation Bug)
+
+   - **Issue**: Incorrect status code.
+   - **Location**: features/api/books.feature
+   - **Expected**: 409 Conflict (Duplicate book creation)
+   - **Current**: 208 Already Reported (Incorrect status code)
+   - **Test**: `@known-bug @bug-6`
+
+7. BUG-5: **Invalid Book Creation (User)** (Data Validation Bug)
+
+   - **Issue**: User can create books with invalid data.
+   - **Location**: features/api/books.feature
+   - **Expected**: 400 Bad Request (Invalid data)
+   - **Current**: 201 Created (Incorrect status code)
+   - **Test**: `@known-bug @bug-7`
