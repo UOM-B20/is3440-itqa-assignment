@@ -3,10 +3,10 @@
 Feature: View Product Details
 
   Background:
-    Given I navigate to the URL "https://automationexercise.com/"
+    Given I am on the home page
 
   Scenario: View details of a product
-    When I click the Products button
+    When I navigate to "Products" page
     Then I should see a list of products
-    When I click on the View Product button for the first product
-    Then I should see the product details displayed
+    When I click View Product button for a random product in the page
+    Then I should see the product details for the selected product

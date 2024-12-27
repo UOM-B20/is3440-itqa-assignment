@@ -76,10 +76,78 @@ When("I update the book with:", async function (docString) {
 });
 
 Then("I store the created book ID", async function () {
-  const responseData = await this.response.json();
+  const responseString = await this.response.text();
 
-  if (responseData.id) {
-    this.storedBookId = responseData.id;
-    expect(this.storedBookId).toBeDefined();
+  try {
+    const responseData = JSON.parse(responseString);
+
+    if (responseData.id) {
+      this.storedBookId = responseData.id;
+      expect(this.storedBookId).toBeDefined();
+    }
+  } catch (error) {
+    console.error("Error storing book ID:", error);
+    throw error;
+  }
+});
+
+When(
+  "I have created a book with following details:",
+  async function (dataTable) {
+    const headers = {
+      ...this.currentAuth,
+    };
+
+    const bookData = dataTable.hashes()[0];
+    let requestData = {};
+
+    // Handle title
+    if (bookData.title !== "<omit>") {
+      if (bookData.title === "null") {
+        bookData.title = null;
+      }
+      requestData.title = bookData.title;
+    }
+
+    // Handle author
+    if (bookData.author !== "<omit>") {
+      if (bookData.author === "null") {
+        bookData.author = null;
+      }
+      requestData.author = bookData.author;
+    }
+
+    this.response = await this.apiContext.post("/api/books", {
+      data: requestData,
+      headers,
+    });
+
+    // Store the book ID immediately after creation
+    if (this.response.ok() && this.response.status() === 201) {
+      const responseData = await this.response.json();
+      this.storedBookId = responseData.id;
+      expect(this.storedBookId).toBeDefined();
+    }
+  }
+);
+
+Then("the book details should match:", async function (dataTable) {
+  try {
+    const expectedData = dataTable.hashes()[0];
+    const responseData = await this.response.json();
+    expect(responseData).toBeDefined();
+    expect(responseData).toHaveProperty("id");
+    expect(responseData).toHaveProperty("title");
+    expect(responseData).toHaveProperty("author");
+    expect(responseData.title).toBe(expectedData.title);
+    expect(responseData.author).toBe(expectedData.author);
+    expect(typeof responseData.id).toBe("number");
+    expect(typeof responseData.title).toBe("string");
+    expect(typeof responseData.author).toBe("string");
+    expect(responseData.title.length).toBeGreaterThan(0);
+    expect(responseData.author.length).toBeGreaterThan(0);
+  } catch (error) {
+    console.error("Error validating book details:", error);
+    throw error;
   }
 });

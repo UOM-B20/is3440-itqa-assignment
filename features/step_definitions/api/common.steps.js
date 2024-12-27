@@ -16,6 +16,12 @@ Then("the response status code should be {int}", async function (statusCode) {
   }
 });
 
+Then("the response message should be {string}", async function (message) {
+  const responseData = await this.response.text();
+
+  expect(responseData).toBe(message);
+});
+
 Given("the book database is empty", async function () {
   const cleaned = await serverUtils.clearDatabase();
   expect(cleaned).toBe(true);

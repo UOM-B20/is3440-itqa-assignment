@@ -67,6 +67,9 @@ Feature: Book API Authorization for User Role
     Then the response status code should be 403
 
   @known-bug @bug-4
-  Scenario: User can not retrive non-existent book details
-    When I send a "GET" request to "/api/books/999"
+  Scenario: User can retrive non-existent book details
+    When I have created a book with following details:
+      | title     | author      |
+      | Test Book | Test Author |
+    When I send a "GET" request to "/api/books/{stored-id}"
     Then the response status code should be 404
