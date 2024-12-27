@@ -1,4 +1,4 @@
-const { When, Given } = require("@cucumber/cucumber");
+const { When, Given, Then } = require("@cucumber/cucumber");
 const { expect } = require("@playwright/test");
 const UIUtils = require("../../support/ui-utils");
 
