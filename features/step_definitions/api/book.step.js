@@ -1,40 +1,6 @@
 const { When, Then } = require("@cucumber/cucumber");
 const { expect } = require("@playwright/test");
 
-When(
-  "I have created a book with following details:",
-  async function (dataTable) {
-    const headers = {
-      ...this.currentAuth,
-    };
-
-    try {
-      const bookData = dataTable.hashes()[0];
-      const { title, author } = bookData;
-
-      this.response = await this.apiContext.post("/api/books", {
-        data: { title, author },
-        headers,
-        failOnStatusCode: false,
-      });
-
-      if (this.response.status() === 201) {
-        const responseData = await this.response.json();
-        this.storedBookId = responseData.id;
-        expect(this.storedBookId).toBeDefined();
-        expect(typeof this.storedBookId).toBe("number");
-      } else {
-        throw new Error(
-          `Failed to create book. Status code: ${this.response.status()}`
-        );
-      }
-    } catch (error) {
-      console.error("Error creating book:", error);
-      throw error;
-    }
-  }
-);
-
 When("I create a book with invalid data:", async function (dataTable) {
   const headers = {
     ...this.currentAuth,
@@ -89,7 +55,6 @@ When("I update the book with:", async function (docString) {
 
   const data = JSON.parse(docString);
 
-  // Replace {stored-id} with actual stored ID if present
   if (data.id && data.id === "{stored-id}" && this.storedBookId) {
     data.id = this.storedBookId;
   }
@@ -110,6 +75,62 @@ When("I update the book with:", async function (docString) {
   }
 });
 
+Then("I store the created book ID", async function () {
+  const responseString = await this.response.text();
+
+  try {
+    const responseData = JSON.parse(responseString);
+
+    if (responseData.id) {
+      this.storedBookId = responseData.id;
+      expect(this.storedBookId).toBeDefined();
+    }
+  } catch (error) {
+    console.error("Error storing book ID:", error);
+    throw error;
+  }
+});
+
+When(
+  "I have created a book with following details:",
+  async function (dataTable) {
+    const headers = {
+      ...this.currentAuth,
+    };
+
+    const bookData = dataTable.hashes()[0];
+    let requestData = {};
+
+    // Handle title
+    if (bookData.title !== "<omit>") {
+      if (bookData.title === "null") {
+        bookData.title = null;
+      }
+      requestData.title = bookData.title;
+    }
+
+    // Handle author
+    if (bookData.author !== "<omit>") {
+      if (bookData.author === "null") {
+        bookData.author = null;
+      }
+      requestData.author = bookData.author;
+    }
+
+    this.response = await this.apiContext.post("/api/books", {
+      data: requestData,
+      headers,
+    });
+
+    // Store the book ID immediately after creation
+    if (this.response.ok() && this.response.status() === 201) {
+      const responseData = await this.response.json();
+      this.storedBookId = responseData.id;
+      expect(this.storedBookId).toBeDefined();
+    }
+  }
+);
+
 Then("the book details should match:", async function (dataTable) {
   try {
     const expectedData = dataTable.hashes()[0];
@@ -128,14 +149,5 @@ Then("the book details should match:", async function (dataTable) {
   } catch (error) {
     console.error("Error validating book details:", error);
     throw error;
-  }
-});
-
-Then("I store the created book ID", async function () {
-  const responseData = await this.response.json();
-
-  if (responseData.id) {
-    this.storedBookId = responseData.id;
-    expect(this.storedBookId).toBeDefined();
   }
 });

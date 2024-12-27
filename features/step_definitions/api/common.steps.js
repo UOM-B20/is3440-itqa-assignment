@@ -3,7 +3,22 @@ const { expect } = require("@playwright/test");
 const serverUtils = require("../../support/server-utils");
 
 Then("the response status code should be {int}", async function (statusCode) {
-  expect(this.response.status()).toBe(statusCode);
+  try {
+    expect(this.response.status()).toBe(statusCode);
+  } catch (error) {
+    throw new Error(
+      `Status Code Mismatch
+       Expected: ${statusCode} 
+       Received: ${this.response.status()}
+      `.replace(/^\s+/gm, "")
+    );
+  }
+});
+
+Then("the response message should be {string}", async function (message) {
+  const responseData = await this.response.text();
+
+  expect(responseData).toBe(message);
 });
 
 Given("the book database is empty", async function () {

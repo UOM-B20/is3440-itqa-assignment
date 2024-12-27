@@ -5,12 +5,12 @@
   "main": "index.js",
   "scripts": {
     "server": "java -jar server/demo-0.0.1-SNAPSHOT.jar",
-    "test": "playwright test",
-    "test:ui": "cucumber-js --tags @ui",
-    "test:api": "cucumber-js --tags @api",
-    "test:ui:ci": "cucumber-js --tags \"@ui and not @known-bug\"",
-    "test:api:ci": "cucumber-js --tags \"@api and not @known-bug\"",
-    "report": "playwright show-report playwright-report"
+    "test:api:ci": "cucumber-js --tags \"@api\" --format html:cucumber-report/report.html",
+    "test:api:strict": "cucumber-js --tags \"@api and not @known-bug\" --format summary",
+    "test:api:report": "cucumber-js --tags \"@api\" --format html:cucumber-report/report.html",
+    "test:ui:ci": "cucumber-js --tags \"@ui\" --format html:cucumber-report/report.html",
+    "test:ui:strict": "cucumber-js --tags \"@ui and not @known-bug\" --format summary",
+    "test:ui:report": "cucumber-js --tags \"@ui\" --format html:cucumber-report/report.html"
   },
   "keywords": [],
   "author": "",
