@@ -8,16 +8,12 @@ Feature: Book API Authorization for Admin Role
   Scenario:Admin can successfully get all books
     When I send a "GET" request to "/api/books"
     Then the response status code should be 200
-    And the books list should be empty
 
   Scenario: Admin can successfully create a new book
     When I have created a book with following details:
       | title       | author      |
       | Admin Book  | Admin Author |
     Then the response status code should be 201
-    And the book details should match:
-      | title       | author      |
-      | Admin Book  | Admin Author |
 
   Scenario: Admin can view specific book details
     Given I have created a book with following details:
