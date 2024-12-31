@@ -4,6 +4,30 @@ Feature: Book Creation API Operations
   Background: 
     Given the book database is empty
 
+
+  @authentication
+  Scenario: Unauthenticated users cannot delete books
+  Given I am an unauthenticated user
+  When I attempt to remove book with ID 1 from catalog
+  Then I should receive an unauthorized access error
+
+
+  @authorization @admin
+  Scenario: Admin should be able to create books.
+  Given I am authenticated as "admin"
+  When I have created a book with following details:
+    | title      | author       |
+    | Admin Book | Admin Author |
+  Then the response status code should be 201
+
+  @authorization @user
+  Scenario: User should be able to create books.
+  Given I am authenticated as "user"
+  When I have created a book with following details:
+    | title     | author      |
+    | User Book | User Author |
+  Then the response status code should be 201
+
   @admin
   Scenario: Admin successfully creates a new book with valid data
     Given I am authenticated with username "admin" and password "password"

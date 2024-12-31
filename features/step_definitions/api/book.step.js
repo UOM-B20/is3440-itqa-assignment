@@ -94,14 +94,10 @@ Then("I store the created book ID", async function () {
 When(
   "I have created a book with following details:",
   async function (dataTable) {
-    const headers = {
-      ...this.currentAuth,
-    };
-
-    let requestData = {};
-
     try {
       const bookData = dataTable.hashes()[0];
+
+      const requestData = {};
 
       if (bookData.title !== "<omit>") {
         requestData.title = bookData.title === "null" ? null : bookData.title;
@@ -112,11 +108,7 @@ When(
           bookData.author === "null" ? null : bookData.author;
       }
 
-      this.response = await this.apiContext.post("/api/books", {
-        data: requestData,
-        headers,
-        failOnStatusCode: false,
-      });
+      this.response = await this.api.post("/api/books", requestData);
 
       if (this.response.status() === 201) {
         const responseData = await this.response.json();
