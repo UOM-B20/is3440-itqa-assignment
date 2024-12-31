@@ -149,19 +149,27 @@ Then("the book details should match:", async function (dataTable) {
 });
 
 Given("the book catalog is empty", async function () {
-  const cleaned = await serverUtils.clearDatabase();
+  const cleaned = await this.serverUtils.clearDatabase();
   expect(cleaned).toBe(true);
 });
 
 When(
   "I attempt to remove book with ID {int} from catalog",
   async function (bookId) {
-    //VALIDATE BOOK ID
-    expect(bookId).toBeGreaterThan(0);
-
     const endpoint = `/api/books/${bookId}`;
 
     this.response = await this.api.delete(endpoint);
+  }
+);
+
+When(
+  "I attempt to update book with ID {int} in catalog with following details:",
+  async function (bookId, dataTable) {
+    const endpoint = `/api/books/${bookId}`;
+
+    const data = dataTable.hashes()[0];
+
+    this.response = await this.api.put(endpoint, data);
   }
 );
 
@@ -177,7 +185,9 @@ Given("the following books exists in the catalog:", async function (dataTable) {
     expect(book).toHaveProperty("id");
 
     //CREATE A BOOK WITH THIS DETAILS (WE KNOW IT WILL BE CREATED, OR OVERWRITE IF EXISTS)
-    const createdBook = await this.serverUtils.createBook(book);
+    const res = await this.serverUtils.createBook(book);
+
+    const createdBook = await res.json();
 
     // VALIDATE BOOK IS CREATED
     expect(createdBook).toBeDefined();

@@ -249,16 +249,12 @@ class ServerUtils {
       storageState: undefined,
     });
 
-    try {
-      const response = await context.post("/api/books", {
-        headers: this.getAuthHeader("admin", "password"),
-        data: bookData,
-      });
+    const response = await context.post("/api/books", {
+      headers: this.getAuthHeader("admin", "password"),
+      data: bookData,
+    });
 
-      return response;
-    } finally {
-      await context.dispose();
-    }
+    return response;
   }
 }
 
