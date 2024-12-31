@@ -46,3 +46,21 @@ Given(
     this.currentAuth = this.getAuthHeader(username, password);
   }
 );
+
+Given("I am an unauthenticated user", async function () {
+  this.api.auth = null;
+});
+
+Given("I am authenticated as {string}", async function (role) {
+  await this.api.setAuth(role, "password");
+
+  expect(this.api.auth).not.toBeNull();
+});
+
+Then("I should receive an unauthorized access error", async function () {
+  expect(this.response.status()).toBe(401);
+});
+
+Then("I should receive a forbidden access error", async function () {
+  expect(this.response.status()).toBe(403);
+});

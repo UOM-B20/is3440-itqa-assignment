@@ -1,25 +1,23 @@
 const { setWorldConstructor, World } = require("@cucumber/cucumber");
-const { chromium, request } = require("@playwright/test");
+const { chromium } = require("@playwright/test");
 const serverUtils = require("./server-utils");
+const ApiClient = require("./api-client");
 
 class CustomWorld extends World {
   constructor(options) {
     super(options);
     this.debug = false;
-    this.apiContext = null;
     this.response = null;
-    this.currentAuth = null;
-    this.storedBookId = null;
-    this.serverUtils = serverUtils;
     this.UI_BASE_URL = "https://automationexercise.com";
+    this.serverUtils = serverUtils;
+
+    // API
+    this.api = new ApiClient(this.serverUtils.BASE_URL);
   }
 
   async initAPI() {
-    this.apiContext = await request.newContext({
-      baseURL: serverUtils.BASE_URL,
-      storageState: undefined,
-    });
-    return this.apiContext;
+    await this.api.init();
+    return this.api.context;
   }
 
   async closeAPI() {
@@ -54,18 +52,10 @@ class CustomWorld extends World {
   }
 
   async reset() {
-    if (this.apiContext) {
-      await this.apiContext.dispose();
-      this.apiContext = null;
-    }
-
+    await this.api.dispose();
     this.response = null;
     this.currentAuth = null;
     this.storedBookId = null;
-  }
-
-  serverUtils() {
-    return serverUtils;
   }
 }
 

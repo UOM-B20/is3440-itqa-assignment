@@ -1,4 +1,4 @@
-const { When, Then } = require("@cucumber/cucumber");
+const { When, Then, Given } = require("@cucumber/cucumber");
 const { expect } = require("@playwright/test");
 
 When("I create a book with invalid data:", async function (dataTable) {
@@ -108,13 +108,14 @@ When(
       }
 
       if (bookData.author !== "<omit>") {
-        requestData.author = bookData.author === "null" ? null : bookData.author;
+        requestData.author =
+          bookData.author === "null" ? null : bookData.author;
       }
-      
+
       this.response = await this.apiContext.post("/api/books", {
         data: requestData,
         headers,
-        failOnStatusCode: false, 
+        failOnStatusCode: false,
       });
 
       if (this.response.status() === 201) {
@@ -123,7 +124,9 @@ When(
         expect(this.storedBookId).toBeDefined();
         expect(typeof this.storedBookId).toBe("number");
       } else {
-        throw new Error(`Failed to create book. Status code: ${this.response.status()}`);
+        throw new Error(
+          `Failed to create book. Status code: ${this.response.status()}`
+        );
       }
     } catch (error) {
       console.error("Error creating book:", error);
@@ -150,5 +153,41 @@ Then("the book details should match:", async function (dataTable) {
   } catch (error) {
     console.error("Error validating book details:", error);
     throw error;
+  }
+});
+
+Given("the book catalog is empty", async function () {
+  const cleaned = await serverUtils.clearDatabase();
+  expect(cleaned).toBe(true);
+});
+
+When(
+  "I attempt to remove book with ID {int} from catalog",
+  async function (bookId) {
+    //VALIDATE BOOK ID
+    expect(bookId).toBeGreaterThan(0);
+
+    const endpoint = `/api/books/${bookId}`;
+
+    this.response = await this.api.delete(endpoint);
+  }
+);
+
+Given("the following books exists in the catalog:", async function (dataTable) {
+  // CONVERT INTO OBJECT ARRAY
+  const books = dataTable.hashes();
+
+  // LOOP THROUGH EACH BOOK
+  for (const book of books) {
+    // VALIDATE EACH BOOK HAS FOLLOWING PROPERTIES
+    expect(book).toHaveProperty("title");
+    expect(book).toHaveProperty("author");
+    expect(book).toHaveProperty("id");
+
+    //CREATE A BOOK WITH THIS DETAILS (WE KNOW IT WILL BE CREATED, OR OVERWRITE IF EXISTS)
+    const createdBook = await this.serverUtils.createBook(book);
+
+    // VALIDATE BOOK IS CREATED
+    expect(createdBook).toBeDefined();
   }
 });

@@ -12,7 +12,10 @@ class ServerUtils {
   constructor() {
     this.serverProcess = null;
     this.BASE_URL = BASE_URL;
+    this.auth = null;
   }
+
+  // GENERIC METHODS, RELATED TO SERVER STARTUP, SHUTDOWN, ETC.
 
   async killProcessOnPort() {
     try {
@@ -145,6 +148,8 @@ class ServerUtils {
     }
   }
 
+  //FUNCTIONS RELATED TO DATABASE OPERATIONS
+
   getAuthHeader(username, password) {
     return {
       Authorization:
@@ -238,18 +243,21 @@ class ServerUtils {
     }
   }
 
-  makeRequest(method, endpoint, headers) {
-    switch (method.toUpperCase()) {
-      case "GET":
-        return this.apiContext.get(endpoint, { headers });
-      case "DELETE":
-        return this.apiContext.delete(endpoint, { headers });
-      case "POST":
-        return this.apiContext.post(endpoint, { headers });
-      case "PUT":
-        return this.apiContext.put(endpoint, { headers });
-      default:
-        throw new Error(`Unsupported HTTP method: ${method}`);
+  async createBook(bookData) {
+    const context = await request.newContext({
+      baseURL: this.BASE_URL,
+      storageState: undefined,
+    });
+
+    try {
+      const response = await context.post("/api/books", {
+        headers: this.getAuthHeader("admin", "password"),
+        data: bookData,
+      });
+
+      return response;
+    } finally {
+      await context.dispose();
     }
   }
 }

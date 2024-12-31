@@ -2,7 +2,6 @@ const { When, Then, Given } = require("@cucumber/cucumber");
 const { expect } = require("@playwright/test");
 const serverUtils = require("../../support/server-utils");
 
-
 Then("the response status code should be {int}", async function (statusCode) {
   try {
     expect(this.response.status()).toBe(statusCode);
@@ -55,3 +54,9 @@ When(
     }
   }
 );
+
+Then("I should receive a success message", async function () {
+  // Just verify successful status code
+  expect(this.response.status()).toBeGreaterThanOrEqual(200);
+  expect(this.response.status()).toBeLessThan(300);
+});
