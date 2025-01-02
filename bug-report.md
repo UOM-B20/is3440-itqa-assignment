@@ -72,7 +72,7 @@
 | Severity      | Minor                                                                                                                                              |
 | Component     | API                                                                                                                                                |
 | Summary       | Duplicate Book Creation (Admin)                                                                                                                    |
-| Description   | When admin attempts to create a duplicate book with existing book details, API returns 208 Already Reported instead of the expected 409 Conflict. Location: features/api/books.feature. 
+| Description   | When admin attempts to create a duplicate book with existing book details, API returns 208 Already Reported instead of the expected 409 Conflict. Location: features/api/create-book.feature 
 
 ### BUG-005
 
@@ -86,7 +86,7 @@
 | Severity      | Critical                                                                                                                                        |
 | Component     | API                                                                                                                                             |
 | Summary       | Invalid Book Creation (Admin)                                                                                                                   |
-| Description   | Admin can create books with invalid data. API returns 201 Created instead of 400 Bad Request. Location: features/api/books.feature.
+| Description   | Admin can create books with invalid data. API returns 201 Created instead of 400 Bad Request. Location: features/api/create-book.feature
 
 ### BUG-006
 
@@ -100,7 +100,7 @@
 | Severity      | Minor                                                                                                                                              |
 | Component     | API                                                                                                                                                |
 | Summary       | Duplicate Book Creation (User)                                                                                                                     |
-| Description   | When user attempts to create a duplicate book, API returns 208 Already Reported instead of the expected 409 Conflict. Location: features/api/books.feature.
+| Description   | When user attempts to create a duplicate book, API returns 208 Already Reported instead of the expected 409 Conflict. Location: features/api/create-book.feature
 
 ### BUG-007
 
@@ -114,4 +114,4 @@
 | Severity      | Critical                                                                                                                                        |
 | Component     | API                                                                                                                                             |
 | Summary       | Invalid Book Creation (User)                                                                                                                    |
-| Description   | User can create books with invalid data. API returns 201 Created instead of 400 Bad Request. Location: features/api/books.feature.
+| Description   | User can create books with invalid data. API returns 201 Created instead of 400 Bad Request. Location: features/api/create-book.feature
