@@ -43,6 +43,13 @@ When(
 Given(
   "I am authenticated with username {string} and password {string}",
   async function (username, password) {
-    this.currentAuth = this.getAuthHeader(username, password);
+    this.api.setAuth(username, password);
   }
 );
+
+Given("I am an unauthenticated user", async function async() {
+  await this.api.clearAuth();
+
+  // Ensure that the API context is reset
+  expect(this.api.currentAuth).toBe(null);
+});
