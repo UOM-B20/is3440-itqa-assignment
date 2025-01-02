@@ -15,7 +15,7 @@ Feature: Add Product to Cart
     And I add the second product to the cart
     And I add the third product to the cart
     And I click ViewCart
-    Then I should see all products in the cart
+    Then I should see all products in the cart 
 
 
 

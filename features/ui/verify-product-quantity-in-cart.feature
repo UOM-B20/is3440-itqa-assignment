@@ -12,7 +12,7 @@ Feature: Verify Product Quantity in Cart
     Given I navigate to the URL "http://automationexercise.com"
     When I click on the Products button
     And I add the first product to the cart
-    And I add the second product to the cart 
+    And I add the second product to the cart
     And I click View Cart
     Then I should see the product quantity as "2"
 

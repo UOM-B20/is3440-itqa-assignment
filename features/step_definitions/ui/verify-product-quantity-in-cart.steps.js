@@ -13,7 +13,7 @@ When("I click the Products button", async function () {
 
 When("I add the first product into the cart", async function () {
   await this.page.click('a[data-product-id="1"]');
-  // Optional: Wait for confirmation modal or toast
+  // Optional: Wait for confirmation modal or toast//
   await this.page.waitForTimeout(60000);
 });
 
