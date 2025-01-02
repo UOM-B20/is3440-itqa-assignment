@@ -59,3 +59,59 @@
 | Component     | API                                                                                                                                                                                                               |
 | Summary       | Regular users unable to retrieve book details                                                                                                                                                                     |
 | Description   | Regular users receive 403 Forbidden when attempting to view individual book details, despite having valid authentication. According to requirements, all authenticated users should be able to view book details. |
+
+### BUG-004
+
+| Field         | Value                                                                                                                                              |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Project       | Book Management System                                                                                                                             |
+| Bug ID        | BUG-004                                                                                                                                            |
+| Date Reported | 2024-12-26                                                                                                                                         |
+| Status        | Open                                                                                                                                               |
+| Priority      | Medium                                                                                                                                             |
+| Severity      | Minor                                                                                                                                              |
+| Component     | API                                                                                                                                                |
+| Summary       | Duplicate Book Creation (Admin)                                                                                                                    |
+| Description   | When admin attempts to create a duplicate book with existing book details, API returns 208 Already Reported instead of the expected 409 Conflict. Location: features/api/books.feature. 
+
+### BUG-005
+
+| Field         | Value                                                                                                                                           |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Project       | Book Management System                                                                                                                          |
+| Bug ID        | BUG-005                                                                                                                                         |
+| Date Reported | 2024-12-26                                                                                                                                      |
+| Status        | Open                                                                                                                                            |
+| Priority      | High                                                                                                                                            |
+| Severity      | Critical                                                                                                                                        |
+| Component     | API                                                                                                                                             |
+| Summary       | Invalid Book Creation (Admin)                                                                                                                   |
+| Description   | Admin can create books with invalid data. API returns 201 Created instead of 400 Bad Request. Location: features/api/books.feature.
+
+### BUG-006
+
+| Field         | Value                                                                                                                                              |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Project       | Book Management System                                                                                                                             |
+| Bug ID        | BUG-006                                                                                                                                            |
+| Date Reported | 2024-12-26                                                                                                                                         |
+| Status        | Open                                                                                                                                               |
+| Priority      | Medium                                                                                                                                             |
+| Severity      | Minor                                                                                                                                              |
+| Component     | API                                                                                                                                                |
+| Summary       | Duplicate Book Creation (User)                                                                                                                     |
+| Description   | When user attempts to create a duplicate book, API returns 208 Already Reported instead of the expected 409 Conflict. Location: features/api/books.feature.
+
+### BUG-007
+
+| Field         | Value                                                                                                                                           |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Project       | Book Management System                                                                                                                          |
+| Bug ID        | BUG-007                                                                                                                                         |
+| Date Reported | 2024-12-26                                                                                                                                      |
+| Status        | Open                                                                                                                                            |
+| Priority      | High                                                                                                                                            |
+| Severity      | Critical                                                                                                                                        |
+| Component     | API                                                                                                                                             |
+| Summary       | Invalid Book Creation (User)                                                                                                                    |
+| Description   | User can create books with invalid data. API returns 201 Created instead of 400 Bad Request. Location: features/api/books.feature.
