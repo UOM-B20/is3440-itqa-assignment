@@ -30,7 +30,11 @@ class UIUtils {
     }
   }
 
-  getBrowserInstances() {
+  async getBrowserInstances() {
+    if (!this.browser) {
+      await this.initBrowser();
+    }
+
     return {
       browser: this.browser,
       context: this.context,

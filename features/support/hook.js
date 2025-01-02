@@ -10,36 +10,12 @@ const uiUtils = require("./ui-utils");
 
 setDefaultTimeout(60 * 1000);
 
-// Helper function to check if test has specific tag
-const hasTag = (pickle, tagName) => 
-  pickle.tags.some((tag) => tag.name === tagName);
-
-// API hooks
-BeforeAll(async function ({ pickle }) {
-  // Only run for API scenarios
-  if (hasTag(pickle, "@api")) {
-    await serverUtils.startServer();
-  }
+BeforeAll({ tags: "@api" }, async function () {
+  await serverUtils.startServer();
 });
 
-AfterAll(async function ({ pickle }) {
-  // Only run for API scenarios
-  if (hasTag(pickle, "@api")) {
-    await serverUtils.shutdown();
-  }
-});
-
-// UI hooks - only initialized when running UI tests
-BeforeAll(async function ({ pickle }) {
-  if (hasTag(pickle, "@ui")) {
-    await uiUtils.initBrowser();
-  }
-});
-
-AfterAll(async function ({ pickle }) {
-  if (hasTag(pickle, "@ui")) {
-    await uiUtils.closeBrowser();
-  }
+AfterAll({ tags: "@api" }, async function () {
+  await serverUtils.shutdown();
 });
 
 Before(async function ({ pickle }) {

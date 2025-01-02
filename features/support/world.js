@@ -15,6 +15,7 @@ class CustomWorld extends World {
     this.uiUtils = uiUtils;
     this.UI_BASE_URL = "https://automationexercise.com";
     this.api = new ApiClient(serverUtils.BASE_URL);
+    this.browser = null;
   }
 
   async initAPI() {
