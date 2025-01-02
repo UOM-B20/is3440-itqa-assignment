@@ -1,11 +1,8 @@
 const { Given, When, Then } = require("@cucumber/cucumber");
 const { expect } = require("@playwright/test");
 
-Given("I navigate to the home page", async function () {
-  await this.page.goto("http://automationexercise.com");
-});
 
-When("I click the Products button", async function () {
+When("I click on Products button", async function () {
   await this.page.click('a[href="/products"]');
 });
 
