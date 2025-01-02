@@ -15,6 +15,10 @@ Then("the response status code should be {int}", async function (statusCode) {
   }
 });
 
+Then("the response should be successful", async function () {
+  expect(this.response.ok()).toBe(true);
+});
+
 Then("the response message should be {string}", async function (message) {
   const responseData = await this.response.text();
 
@@ -34,20 +38,12 @@ When(
       ? endpoint.replace("{stored-id}", this.storedBookId)
       : endpoint;
 
-    const headers = {
-      ...this.currentAuth,
-    };
-
     switch (method.toUpperCase()) {
       case "GET":
-        this.response = await this.apiContext.get(finalEndpoint, {
-          headers,
-        });
+        this.response = await this.api.get(finalEndpoint);
         break;
       case "DELETE":
-        this.response = await this.apiContext.delete(finalEndpoint, {
-          headers,
-        });
+        this.response = await this.api.delete(finalEndpoint);
         break;
       default:
         throw new Error(`Unsupported HTTP method: ${method}`);
