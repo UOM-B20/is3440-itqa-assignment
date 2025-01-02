@@ -59,16 +59,9 @@ When("I update the book with:", async function (docString) {
     data.id = this.storedBookId;
   }
 
-  const headers = {
-    ...this.currentAuth,
-  };
-
   switch (method.toUpperCase()) {
     case "PUT":
-      this.response = await this.apiContext.put(finalEndpoint, {
-        data,
-        headers,
-      });
+      this.response = await this.api.put(finalEndpoint, data);
       break;
     default:
       throw new Error(`Unsupported HTTP method: ${method}`);
@@ -94,10 +87,6 @@ Then("I store the created book ID", async function () {
 When(
   "I have created a book with following details:",
   async function (dataTable) {
-    const headers = {
-      ...this.currentAuth,
-    };
-
     let requestData = {};
 
     try {
@@ -108,14 +97,11 @@ When(
       }
 
       if (bookData.author !== "<omit>") {
-        requestData.author = bookData.author === "null" ? null : bookData.author;
+        requestData.author =
+          bookData.author === "null" ? null : bookData.author;
       }
-      
-      this.response = await this.apiContext.post("/api/books", {
-        data: requestData,
-        headers,
-        failOnStatusCode: false, 
-      });
+
+      this.response = await this.api.post("/api/books", requestData);
 
       if (this.response.status() === 201) {
         const responseData = await this.response.json();
@@ -123,7 +109,9 @@ When(
         expect(this.storedBookId).toBeDefined();
         expect(typeof this.storedBookId).toBe("number");
       } else {
-        throw new Error(`Failed to create book. Status code: ${this.response.status()}`);
+        throw new Error(
+          `Failed to create book. Status code: ${this.response.status()}`
+        );
       }
     } catch (error) {
       console.error("Error creating book:", error);
@@ -131,6 +119,22 @@ When(
     }
   }
 );
+
+When("I try create a book with following details:", async function (dataTable) {
+  let requestData = {};
+
+  const bookData = dataTable.hashes()[0];
+
+  if (bookData.title !== "<omit>") {
+    requestData.title = bookData.title === "null" ? null : bookData.title;
+  }
+
+  if (bookData.author !== "<omit>") {
+    requestData.author = bookData.author === "null" ? null : bookData.author;
+  }
+
+  this.response = await this.api.post("/api/books", requestData);
+});
 
 Then("the book details should match:", async function (dataTable) {
   try {
@@ -151,4 +155,84 @@ Then("the book details should match:", async function (dataTable) {
     console.error("Error validating book details:", error);
     throw error;
   }
+});
+
+When(
+  "the book library database has following book:",
+  async function (dataTable) {
+    const book = dataTable.hashes()[0];
+
+    const body = {
+      title: book.title,
+      author: book.author,
+    };
+
+    expect(body.title).toBeDefined();
+    expect(body.author).toBeDefined();
+    expect(body.title.length).toBeGreaterThan(0);
+    expect(body.author.length).toBeGreaterThan(0);
+
+    this.response = await this.serverUtils.createBook(body);
+
+    expect(this.response).toBeDefined();
+    expect(this.response.status()).toBe(201);
+
+    const responseData = await this.response.json();
+
+    expect(responseData).toBeDefined();
+    expect(responseData).toHaveProperty("id");
+    expect(typeof responseData.id).toBe("number");
+
+    this.storedBookId = responseData.id;
+  }
+);
+
+When("I delete the book using stored id", async function () {
+  const storedId = this.storedBookId;
+  expect(storedId).toBeDefined();
+
+  this.response = await this.api.delete(`/api/books/${storedId}`);
+});
+
+When(
+  "I try to update the book using {string} with following details:",
+  async function (id, dataTable) {
+    // If id is {stored-id}, use storedBookId, otherwise parse the string as number
+    const storedId =
+      id === "{stored-id}" ? this.storedBookId : parseInt(id, 10);
+
+    // Validate storedId
+    expect(storedId).toBeDefined();
+    expect(typeof storedId).toBe("number");
+    expect(storedId).toBeGreaterThan(0);
+
+    const data = dataTable.hashes()[0];
+
+    const sanitizedData = {
+      id: storedId,
+      title: data.title,
+      author: data.author,
+    };
+
+    expect(sanitizedData.title).toBeDefined();
+    expect(sanitizedData.author).toBeDefined();
+    expect(sanitizedData.title.length).toBeGreaterThan(0);
+    expect(sanitizedData.author.length).toBeGreaterThan(0);
+
+    this.response = await this.api.put(`/api/books/${storedId}`, sanitizedData);
+  }
+);
+
+When("I try to retrieve the book with id:{string}", async function (id) {
+  const storedId = id === "{stored-id}" ? this.storedBookId : parseInt(id, 10);
+
+  expect(storedId).toBeDefined();
+  expect(isNaN(storedId)).toBeFalsy();
+  expect(storedId).toBeGreaterThan(0);
+
+  this.response = await this.api.get(`/api/books/${storedId}`);
+});
+
+When("I try to retrieve all books", async function () {
+  this.response = await this.api.get("/api/books");
 });

@@ -1,8 +1,32 @@
 @api
 Feature: Book Creation API Operations
 
-  Background: 
+  Background:
     Given the book database is empty
+
+  @authentication
+  Scenario: Unauthenticated user fails to create a book
+    Given I am an unauthenticated user
+    When I try create a book with following details:
+      | title    | author     |
+      | New Book | New Author |
+    Then the response status code should be 401
+
+  @authorization @admin
+  Scenario: Admin role can create a book
+    Given I am authenticated with username "admin" and password "password"
+    When I have created a book with following details:
+      | title      | author       |
+      | Admin Book | Admin Author |
+    Then the response status code should be 201
+
+  @authorization @user
+  Scenario: User role can create a book
+    Given I am authenticated with username "user" and password "password"
+    When I have created a book with following details:
+      | title     | author      |
+      | User Book | User Author |
+    Then the response status code should be 201
 
   @admin
   Scenario: Admin successfully creates a new book with valid data
@@ -15,8 +39,7 @@ Feature: Book Creation API Operations
       | title      | author       |
       | Admin Book | Admin Author |
 
-  @admin
-  @known-bug @bug-4
+  @admin @known-bug @bug-4
   Scenario: Admin fails to create a duplicate book
     """
     Bug Details:
@@ -26,6 +49,7 @@ Feature: Book Creation API Operations
     Actual: Got a already Reported response (208)
     Impact: Medium - Incorrect status code affects API contract and client implementations.
     """
+
     Given I am authenticated with username "admin" and password "password"
     And I have created a book with following details:
       | title      | author       |
@@ -36,8 +60,7 @@ Feature: Book Creation API Operations
     Then the response status code should be 409
     And the response message should be "Book Already Exists"
 
-  @admin 
-  @known-bug @bug-5
+  @admin @known-bug @bug-5
   Scenario Outline: Admin fails to create a book with invalid data
     """
     Bug Details:
@@ -47,20 +70,22 @@ Feature: Book Creation API Operations
     Actual: Able to create a book with invalid data (201) for some cases.
     Impact: High - Allows creation of invalid data
     """
+
     Given I am authenticated with username "admin" and password "password"
     When I have created a book with following details:
       | title   | author   |
       | <title> | <author> |
     Then the response status code should be 400
+
     Examples:
-      | title    | author      |
-      | <omit>   | Author1     | # Missing title field
-      | Book1    | <omit>      | # Missing author field
-      | <omit>   | <omit>      | # Empty request (no fields)
-      |          | Author2     | # Whitespace title 
-      | Book2    |             | # Whitespace author 
-      | null     | Author3     | # Null title
-      | Book3    | null        | # Null author
+      | title  | author  |
+      | <omit> | Author1 |
+      | Book1  | <omit>  |
+      | <omit> | <omit>  |
+      |        | Author2 |
+      | Book2  |         |
+      | null   | Author3 |
+      | Book3  | null    |
 
   @user
   Scenario: User successfully creates a new book with valid data
@@ -73,8 +98,7 @@ Feature: Book Creation API Operations
       | title     | author      |
       | User Book | User Author |
 
-  @user
-  @known-bug @bug-6
+  @user @known-bug @bug-6
   Scenario: User fails to create a duplicate book
     """
     Bug Details:
@@ -84,6 +108,7 @@ Feature: Book Creation API Operations
     Actual: Got a already Reported response (208)
     Impact: Medium - Incorrect status code affects API contract and client implementations.
     """
+
     Given I am authenticated with username "user" and password "password"
     And I have created a book with following details:
       | title     | author      |
@@ -95,9 +120,7 @@ Feature: Book Creation API Operations
     Then the response status code should be 409
     And the response message should be "Book Already Exists"
 
-
-  @user
-  @known-bug @bug-7
+  @user @known-bug @bug-7
   Scenario Outline: User fails to create a book with invalid data
     """
     Bug Details:
@@ -107,17 +130,19 @@ Feature: Book Creation API Operations
     Actual: Able to create a book with invalid data (201) for some cases
     Impact: High - Allows creation of invalid data
     """
+
     Given I am authenticated with username "user" and password "password"
     When I have created a book with following details:
       | title   | author   |
       | <title> | <author> |
     Then the response status code should be 400
+
     Examples:
-      | title    | author      |
-      | <omit>   | Author1     | # Missing title field
-      | Book1    | <omit>      | # Missing author field
-      | <omit>   | <omit>      | # Empty request (no fields)
-      |          | Author2     | # Whitespace title 
-      | Book2    |             | # Whitespace author 
-      | null     | Author3     | # Null title
-      | Book3    | null        | # Null author
+      | title  | author  |
+      | <omit> | Author1 |
+      | Book1  | <omit>  |
+      | <omit> | <omit>  |
+      |        | Author2 |
+      | Book2  |         |
+      | null   | Author3 |
+      | Book3  | null    |
