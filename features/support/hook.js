@@ -6,7 +6,6 @@ const {
   AfterAll,
 } = require("@cucumber/cucumber");
 const serverUtils = require("./server-utils");
-const uiUtils = require("./ui-utils");
 
 setDefaultTimeout(60 * 1000);
 
@@ -21,13 +20,8 @@ AfterAll({ tags: "@api" }, async function () {
 Before(async function ({ pickle }) {
   // UI test setup
   if (pickle.tags.some((tag) => tag.name === "@ui")) {
-    if (!this.browser) {
-      await this.initUI();
-    } else {
-      // Just navigate to base URL and clear state
-      await this.page.goto(this.UI_BASE_URL);
-      await this.page.context().clearCookies();
-    }
+    await this.closeUI();
+    await this.initUI();
   }
 
   // API test setup
@@ -41,9 +35,7 @@ Before(async function ({ pickle }) {
 After(async function ({ pickle }) {
   // UI test cleanup
   if (pickle.tags.some((tag) => tag.name === "@ui")) {
-    // Clear cookies and localStorage instead of closing browser
-    await this.page.context().clearCookies();
-    await this.page.evaluate(() => window.localStorage.clear());
+    await this.closeUI();
   }
 
   // API test cleanup

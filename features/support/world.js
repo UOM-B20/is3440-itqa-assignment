@@ -1,6 +1,6 @@
 const { setWorldConstructor, World } = require("@cucumber/cucumber");
+const { chromium, request } = require("@playwright/test");
 const serverUtils = require("./server-utils");
-const uiUtils = require("./ui-utils");
 const ApiClient = require("./api-client");
 
 class CustomWorld extends World {
@@ -12,10 +12,8 @@ class CustomWorld extends World {
     this.currentAuth = null;
     this.storedBookId = null;
     this.serverUtils = serverUtils;
-    this.uiUtils = uiUtils;
     this.UI_BASE_URL = "https://automationexercise.com";
     this.api = new ApiClient(serverUtils.BASE_URL);
-    this.browser = null;
   }
 
   async initAPI() {
@@ -28,14 +26,23 @@ class CustomWorld extends World {
   }
 
   async initUI() {
-    const { page } = await uiUtils.getBrowserInstances();
-    this.page = page;
-    await this.page.goto(this.UI_BASE_URL);
+    if (!this.browser) {
+      this.browser = await chromium.launch({ headless: true });
+      this.context = await this.browser.newContext();
+      this.page = await this.context.newPage();
+      // go to the base URL
+      await this.page.goto(this.UI_BASE_URL);
+    }
     return this.page;
   }
 
   async closeUI() {
-    this.page = null;
+    if (this.browser) {
+      await this.browser.close();
+      this.browser = null;
+      this.context = null;
+      this.page = null;
+    }
   }
 
   getAuthHeader(username, password) {
