@@ -23,7 +23,7 @@ Then("I should see the first product in the cart", async function () {
     timeout: 30000 
   });
 
-  //Wait for product
+  //Wait for produc
   await this.page.waitForSelector('tr#product-1', {
     state: 'visible',
     timeout: 30000
