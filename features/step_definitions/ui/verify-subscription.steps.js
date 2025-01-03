@@ -5,7 +5,7 @@ const { chromium } = require("playwright");
 let browser, page;
 
 Given("I open the browser", async () => {
-  browser = await chromium.launch({ headless: false });
+  browser = await chromium.launch({ headless: true });
   const context = await browser.newContext();
   page = await context.newPage();
 });
