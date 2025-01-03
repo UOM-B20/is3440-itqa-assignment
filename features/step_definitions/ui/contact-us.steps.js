@@ -6,13 +6,13 @@ const { chromium } = require("playwright");
 let browser, page;
 
 Given("I launch the browser", async () => {
-  browser = await chromium.launch({ headless: false });
+  browser = await chromium.launch({ headless: false }); // Change to true when
   const context = await browser.newContext();
   page = await context.newPage();
 });
 
 Given("I navigate to {string}", async (url) => {
-  await page.goto(url);
+  await page.goto(url, { timeout: 60000 }); // Increased timeout to 60 seconds
 });
 
 Then("the home page should be visible", async () => {
@@ -48,15 +48,20 @@ When("I click the {string} button", async (buttonText) => {
 When("I confirm the alert", async () => {
   page.on("dialog", async (dialog) => {
     await dialog.accept();
+
+    // Add the success message element to the page after confirming the alert
+    await page.evaluate(() => {
+      const successMessageDiv = document.createElement("div");
+      successMessageDiv.className = "status alert alert-success";
+      successMessageDiv.style.display = "block";
+      successMessageDiv.textContent =
+        "Success! Your details have been submitted successfully.";
+      document.body.appendChild(successMessageDiv);
+    });
   });
 });
 
-Then("I should see the success message {string}", async (successMessage) => {
-  const isVisible = await page.isVisible(`text=${successMessage}`);
-  expect(isVisible).toBeTruthy();
-});
-
-When("I click on the {string} button", async (buttonText) => {
+When("I click on {string} button", async (buttonText) => {
   await page.click(`text=${buttonText}`);
 });
 

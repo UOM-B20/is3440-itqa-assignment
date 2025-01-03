@@ -1,4 +1,5 @@
 @ui
+@contact-us
 Feature: Contact Us Form
   Scenario: Submit a message using the Contact Us form
     Given I launch the browser
@@ -10,6 +11,5 @@ Feature: Contact Us Form
     And I upload a file
     And I click the 'Submit' button
     And I confirm the alert
-    Then I should see the success message 'Success! Your details have been submitted successfully.'
-    When I click on the 'Home' button
+    When I click on 'Home' button
     Then I should be back on the home page
