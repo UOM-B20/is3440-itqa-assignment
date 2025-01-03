@@ -1,8 +1,9 @@
 const { Given, When, Then } = require('@cucumber/cucumber');
 const { expect } = require('@playwright/test');
 
-Given('the user is on the homepage', async function () {
-  await this.page.goto('https://automationexercise.com/products');
+Given('the user is on the search product discovery homepage', async function () {
+  const currentURL = this.page.url();
+  expect(currentURL).toContain('automationexercise.com/products');
 });
 
 When('the user enters {string} into the search bar', async function (product) {
@@ -14,6 +15,7 @@ When('the user clicks the search button', async function () {
 });
 
 Then('the user should see search results for {string}', async function (product) {
+  await this.page.waitForSelector('.productinfo p');
   const productText = await this.page.textContent('.productinfo p');
   expect(productText).toContain(product);
 });
