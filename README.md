@@ -23,7 +23,7 @@
 | 2        |                     | Cart UI                       |
 | 3        |                     | Search & Product Discovery UI |
 | 204184B  | Sachin Samararathna | Checkout UI                   |
-| 5        |                     | Forms UI                      |
+| 204154J  | Praveen Dananjaya   | Forms UI                      |
 
 ##### 1. Product Catalog Viewing UI (3 test cases)
 
@@ -119,7 +119,7 @@ npm run test:api:ci
 | -------- | ------------------- | ------------------------------ |
 | 204017T  | Maitha Sandaruwan   | Authentication & Authorization |
 | 204184B  | Sachin Samararathna | Create Book Operations         |
-| 3        |                     | Update Book Operations         |
+| 204154J  | Praveen Dananjaya   | Update Book Operations         |
 | 4        |                     | Get All Books                  |
 | 5        |                     | Get Single Book                |
 | 6        |                     | Delete Book Operations         |
