@@ -287,6 +287,54 @@ Then(
   }
 );
 
+When(
+  "I try to update book with id:{string} and verify response:",
+  async function (id, datatable) {
+    const testcases = datatable.hashes(); //[{id: '1', title: 'new title', author: 'new author', status: 'success'/ 'fail', satusCode: '200'}]
+
+    const storedId =
+      id === "{stored-id}" ? this.storedBookId : parseInt(id, 10);
+
+    for (const testcase of testcases) {
+      let bodyId;
+      switch (testcase.id) {
+        case "{stored-id}":
+          bodyId = this.storedBookId;
+          break;
+        case "null":
+          bodyId = null;
+          break;
+        default:
+          bodyId = parseInt(testcase.id, 10);
+      }
+
+      const data = {
+        id: bodyId,
+        title: testcase.title === "null" ? null : testcase.title.trim(),
+        author: testcase.author === "null" ? null : testcase.author.trim(),
+      };
+
+      this.response = await this.api.put(`/api/books/${storedId}`, data);
+
+      if (testcase.status === "success") {
+        const statusCode = await this.response.status();
+        //successful
+        expect(statusCode).toBeGreaterThanOrEqual(200);
+        expect(statusCode).toBeLessThan(300);
+      } else {
+        const statusCode = await this.response.status();
+        expect(statusCode).toBeGreaterThanOrEqual(400);
+        expect(statusCode).toBeLessThan(600);
+      }
+
+      if (testcase.statusCode) {
+        const statusCode = await this.response.status();
+        expect(statusCode).toBe(parseInt(testcase.statusCode, 10));
+      }
+    }
+  }
+);
+
 When("I try to delete the book with id:{string}", async function (id) {
   const storedId = id === "{stored-id}" ? this.storedBookId : parseInt(id, 10);
   this.response = await this.api.delete(`/api/books/${storedId}`);
