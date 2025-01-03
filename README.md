@@ -19,7 +19,7 @@
 
 | Index No | Name                | Test Case                     |
 | -------- | ------------------- | ----------------------------- |
-| 2        |                     | Product Catalog Viewing UI    |
+| 204084T  | Isiwarani Jayasekara| Product Catalog Viewing UI    |
 | 2        |                     | Cart UI                       |
 | 3        |                     | Search & Product Discovery UI |
 | 204184B  | Sachin Samararathna | Checkout UI                   |
@@ -121,7 +121,7 @@ npm run test:api:ci
 | 204184B  | Sachin Samararathna | Create Book Operations         |
 | 204154J  | Praveen Dananjaya   | Update Book Operations         |
 | 4        |                     | Get All Books                  |
-| 5        |                     | Get Single Book                |
+| 204084T  | Isiwarani Jayasekara| Get Single Book                |
 | 6        |                     | Delete Book Operations         |
 
 ##### 1: Authentication & Authorization (3 test cases)
