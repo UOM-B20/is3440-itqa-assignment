@@ -19,6 +19,13 @@ When("I click the Products button", async function () {
   expect(this.page.url()).toContain("/products");
 });
 
+When("I click the Cart button", async function () {
+  const cartBtn = await this.page.locator("li:has(a i.fa.fa-shopping-cart)");
+  await expect(cartBtn).toContainText("Cart");
+  await cartBtn.click();
+  expect(this.page.url()).toContain("/view_cart");
+});
+
 When("I navigate to {string} page", async function (pageName) {
   const selector = {
     Products: "li:has(i.material-icons.card_travel)",

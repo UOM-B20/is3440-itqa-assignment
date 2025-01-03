@@ -236,3 +236,53 @@ When("I try to retrieve the book with id:{string}", async function (id) {
 When("I try to retrieve all books", async function () {
   this.response = await this.api.get("/api/books");
 });
+
+When(
+  "the book library database has following books:",
+  async function (dataTable) {
+    const books = dataTable.hashes();
+
+    for (const book of books) {
+      const body = {
+        title: book.title,
+        author: book.author,
+      };
+
+      expect(body.title).toBeDefined();
+      expect(body.author).toBeDefined();
+      expect(body.title.length).toBeGreaterThan(0);
+      expect(body.author.length).toBeGreaterThan(0);
+
+      this.response = await this.serverUtils.createBook(body);
+    }
+  }
+);
+
+Then(
+  "the response should contain {int} records and book details should match:",
+  async function (length, dataTable) {
+    const expectedBooks = dataTable.hashes();
+
+    expect(this.response).toBeDefined();
+    expect(this.response.status()).toBe(200);
+
+    const responseData = await this.response.json();
+
+    expect(responseData).toBeDefined();
+    expect(Array.isArray(responseData)).toBe(true);
+    expect(responseData.length).toBe(length);
+
+    for (let i = 0; i < length; i++) {
+      const expectedBook = expectedBooks[i];
+      const actualBook = responseData[i];
+
+      expect(actualBook).toBeDefined();
+      expect(actualBook).toHaveProperty("id");
+      expect(actualBook).toHaveProperty("title");
+      expect(actualBook).toHaveProperty("author");
+
+      expect(actualBook.title).toBe(expectedBook.title);
+      expect(actualBook.author).toBe(expectedBook.author);
+    }
+  }
+);
