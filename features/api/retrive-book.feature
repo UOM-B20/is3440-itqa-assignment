@@ -76,3 +76,41 @@ Feature: Book API Existing and Non-existent Book Retrieval
     And I am authenticated with username "admin" and password "password"
     When I send a "GET" request to "/api/books/999"
     And the response message should be "Book not found"
+
+  Scenario: Admin can we view all books
+    Given the book library database has following books:
+      | title       | author        |
+      | Test Book 1 | Test Author 1 |
+      | Test Book 2 | Test Author 2 |
+      | Test Book 3 | Test Author 3 |
+      | Test Book 4 | Test Author 4 |
+      | Test Book 5 | Test Author 5 |
+    And I am authenticated with username "admin" and password "password"
+    When I try to retrieve all books
+    Then the response should be successful
+    And the response should contain 5 records and book details should match:
+      | title       | author        |
+      | Test Book 1 | Test Author 1 |
+      | Test Book 2 | Test Author 2 |
+      | Test Book 3 | Test Author 3 |
+      | Test Book 4 | Test Author 4 |
+      | Test Book 5 | Test Author 5 |
+
+  Scenario: User can view all books
+    Given the book library database has following books:
+      | title       | author        |
+      | Test Book 1 | Test Author 1 |
+      | Test Book 2 | Test Author 2 |
+      | Test Book 3 | Test Author 3 |
+      | Test Book 4 | Test Author 4 |
+      | Test Book 5 | Test Author 5 |
+    And I am authenticated with username "user" and password "password"
+    When I try to retrieve all books
+    Then the response should be successful
+    And the response should contain 5 records and book details should match:
+      | title       | author        |
+      | Test Book 1 | Test Author 1 |
+      | Test Book 2 | Test Author 2 |
+      | Test Book 3 | Test Author 3 |
+      | Test Book 4 | Test Author 4 |
+      | Test Book 5 | Test Author 5 |
