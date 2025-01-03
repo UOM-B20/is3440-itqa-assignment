@@ -6,7 +6,7 @@ const {
   AfterAll,
 } = require("@cucumber/cucumber");
 const serverUtils = require("./server-utils");
-
+const UIUtils = require("./ui-utils");
 setDefaultTimeout(60 * 1000);
 
 BeforeAll({ tags: "@api" }, async function () {
@@ -35,6 +35,9 @@ Before(async function ({ pickle }) {
 After(async function ({ pickle }) {
   // UI test cleanup
   if (pickle.tags.some((tag) => tag.name === "@ui")) {
+    if (this.page) {
+      await UIUtils.emptyCart(this.page);
+    }
     await this.closeUI();
   }
 

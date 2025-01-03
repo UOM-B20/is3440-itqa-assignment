@@ -1,18 +1,27 @@
 @ui
 Feature: Verify Product Quantity in Cart
 
-  Scenario: Add one product to cart and verify product quantity
-    Given I navigate to the URL "http://automationexercise.com"
-    When I click on the Products button
-    And I add the first product to the cart
-    And I click View Cart
-    Then I should see the product quantity as "1"
+  Background:
+    Given I am on the home page
+    And I have no products in the cart
 
-  Scenario: Add two products to cart and verify product quantity
-    Given I navigate to the URL "http://automationexercise.com"
-    When I click on the Products button
-    And I add the first product to the cart
-    And I add the second product to the cart
-    And I click View Cart
-    Then I should see the product quantity as "2"
+  Scenario: Verify one quantity of product in cart
+    Given I navigate to "Products" page
+    When I add product with id "1" to cart
+    And I select "view cart" in the cart modal
+    Then I should see the product with id "1" in the cart
+    And I should see the product quantity as "1" for product id:"1" in the cart
 
+  Scenario: Verify multiple quantity of products in cart
+    Given I navigate to "Products" page
+    When I add following products to cart
+      | id | quantity |
+      |  1 |        1 |
+      |  2 |        2 |
+      |  3 |        3 |
+    Then I click the Cart button
+    Then I should see the following products in the cart and validate totals:
+      | id | quantity |
+      |  1 |        1 |
+      |  2 |        2 |
+      |  3 |        3 |
