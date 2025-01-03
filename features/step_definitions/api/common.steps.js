@@ -50,3 +50,10 @@ When(
     }
   }
 );
+
+Then("the response should be unsuccessful", async function () {
+  const status = this.response.status();
+
+  expect(status).toBeGreaterThanOrEqual(400);
+  expect(status).toBeLessThan(600);
+});
