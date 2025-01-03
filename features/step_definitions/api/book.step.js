@@ -334,3 +334,8 @@ When(
     }
   }
 );
+
+When("I try to delete the book with id:{string}", async function (id) {
+  const storedId = id === "{stored-id}" ? this.storedBookId : parseInt(id, 10);
+  this.response = await this.api.delete(`/api/books/${storedId}`);
+});
