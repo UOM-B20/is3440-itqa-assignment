@@ -5,7 +5,7 @@ const { chromium } = require("playwright");
 let browser, page;
 
 Given("I open the browser", async () => {
-  browser = await chromium.launch({ headless: true });
+  browser = await chromium.launch({ headless: false });
   const context = await browser.newContext();
   page = await context.newPage();
 });
@@ -23,7 +23,7 @@ When("I scroll to bottom of the page", async function () {
   await page.evaluate(() => {
     window.scrollTo(0, document.body.scrollHeight);
   });
-  await page.waitForTimeout(1000); // Wait for scroll to complete
+  await page.waitForTimeout(10000); // Wait for scroll to complete
 });
 
 Then("I should see the text {string}", async (text) => {
@@ -34,8 +34,8 @@ Then("I should see the text {string}", async (text) => {
 When(
   "I enter my email address {string} and click the arrow button",
   async (email) => {
-    await page.fill('[data-qa="suscribe_email"]', email);
-    await page.click('[data-qa="subscribe-button"]'); // Adjust the selector as needed
+    await page.fill('[id="susbscribe_email"]', email);
+    await page.click('[id="subscribe"]'); // Adjust the selector as needed
   }
 );
 
