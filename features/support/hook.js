@@ -41,6 +41,13 @@ After(async function ({ pickle }) {
     await this.closeUI();
   }
 
+  //navigation to home page from contact us page
+  After(async function (scenario) {
+    if (scenario.pickle.tags.some(tag => tag.name === '@contact-us')) {
+      await page.goto('https://automationexercise.com', { waitUntil: 'load' });
+    }
+  });
+  
   // API test cleanup
   if (pickle.tags.some((tag) => tag.name === "@api")) {
     await this.closeAPI();
