@@ -1,24 +1,25 @@
 const { Given, When, Then } = require("@cucumber/cucumber");
 const { expect } = require("@playwright/test");
+const { chromium } = require("playwright");
 
 let browser, page;
 
-Given("I launch the browser", async () => {
+Given("I open the browser", async () => {
   browser = await chromium.launch({ headless: true });
   const context = await browser.newContext();
   page = await context.newPage();
 });
 
-Given("I navigate to {string}", async (url) => {
+Given("I navigate to the {string}", async (url) => {
   await page.goto(url, { timeout: 60000 });
 });
 
-Then("the home page should be visible", async () => {
+Then("home page should be visible", async () => {
   const title = await page.title();
   expect(title).toContain("Automation Exercise");
 });
 
-When("I scroll to the bottom of the page", async function () {
+When("I scroll to bottom of the page", async function () {
   await page.evaluate(() => {
     window.scrollTo(0, document.body.scrollHeight);
   });
