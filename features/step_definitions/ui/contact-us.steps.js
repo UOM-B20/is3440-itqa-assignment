@@ -6,7 +6,7 @@ const { chromium } = require("playwright");
 let browser, page;
 
 Given("I launch the browser", async () => {
-  browser = await chromium.launch({ headless: false }); // Change to true when
+  browser = await chromium.launch({ headless: true }); // Change to true when
   const context = await browser.newContext();
   page = await context.newPage();
 });
