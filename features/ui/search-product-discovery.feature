@@ -4,7 +4,6 @@ Feature: AutoMationExercise Website reviews a product
   Background:
     Given I navigate to the URL "https://automationexercise.com/products"
 
-Feature: Search Product Discovery
 
   Scenario: User searches for a product
     Given the user is on the homepage

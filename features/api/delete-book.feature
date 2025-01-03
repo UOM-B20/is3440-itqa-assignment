@@ -54,3 +54,45 @@ Feature: Delete Book Management
     And I am authenticated with username "user" and password "password"
     When I delete the book using stored id
     Then the response status code should be 403
+
+  @functionalities
+  Scenario: Delete a book that does not exist
+  """
+  Note: There is a bug in authorization, where admin users are unable to delete books. This bug is being tracked under BUG-001. The workaround is to use a user with delete permissions to test the delete functionality.
+  """
+
+    Given I am authenticated with username "user" and password "password"
+    # initially the book database is empty, is there is no book with id:"999"
+    When I try to delete the book with id:"999"
+    Then the response status code should be 404
+
+  @functionalities
+  Scenario: Delete an existing book
+  """
+  Note: There is a bug in authorization, where admin users are unable to delete books. This bug is being tracked under BUG-001. The workaround is to use a user with delete permissions to test the delete functionality.
+  """
+
+    Given the book library database has following book:
+      | title     | author      |
+      | Test Book | Test Author |
+    And I am authenticated with username "user" and password "password"
+    When I delete the book using stored id
+    Then the response should be successful
+
+  @functionalities
+  Scenario: Delete a book with invalid id
+  """
+  Note: There is a bug in authorization, where admin users are unable to delete books. This bug is being tracked under BUG-001. The workaround is to use a user with delete permissions to test the delete functionality.
+  """
+
+    Given the book library database has following book:
+      | title     | author      |
+      | Test Book | Test Author |
+    And I am authenticated with username "user" and password "password"
+    When I try to delete the book with id:"<invalid-id>"
+    Then the response status code should be 400
+
+    Examples:
+      | invalid-id |
+      | abc        |
+      | $67        |

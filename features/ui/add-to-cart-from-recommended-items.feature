@@ -4,7 +4,6 @@ Feature: AutoMationExercise Website Add to cart from Recommended item
   Background:
     Given I navigate to the URL "http://automationexercise.com"
 
-Feature: Add to Cart from Recommended Items
 
   Scenario: User adds a recommended item to the cart
     Given the user is on the homepage
