@@ -20,7 +20,7 @@
 | Index No | Name                | Test Case                     |
 | -------- | ------------------- | ----------------------------- |
 | 2        |                     | Product Catalog Viewing UI    |
-| 2        |                     | Cart UI                       |
+| 204030C  | Dinusha Gihan       | Cart UI                       |
 | 3        |                     | Search & Product Discovery UI |
 | 204184B  | Sachin Samararathna | Checkout UI                   |
 | 5        |                     | Forms UI                      |
@@ -120,7 +120,7 @@ npm run test:api:ci
 | 204017T  | Maitha Sandaruwan   | Authentication & Authorization |
 | 204184B  | Sachin Samararathna | Create Book Operations         |
 | 3        |                     | Update Book Operations         |
-| 4        |                     | Get All Books                  |
+| 204030C  | Dinusha Gihan       | Get All Books                  |
 | 5        |                     | Get Single Book                |
 | 6        |                     | Delete Book Operations         |
 
